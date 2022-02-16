@@ -1,0 +1,83 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jun 21, 2019, 10:59:30 AM
+    Author     : Shaju
+*/
+
+/*
+--------------------------------------------------------------------------------
+    Default Design
+    Customize Bootstrap Design
+________________________________________________________________________________
+*/
+.card .card-header{
+    background-color: #ddd ;
+    padding: 15px 20px ;
+}
+
+.swal2-popup{
+    font-size: 12px !important;
+}
+.swal2-container{
+    z-index: 99999 !important;
+}
+
+.active-menu, .active-menu a:hover{
+    background: #000029 !important; 
+}
+.pcoded .pcoded-item > li.active-menu > a{
+    background: #000029 !important; 
+}
+.active-menu .active-subMenu a{
+    background : #2f4364;
+    color: #FE8A7D !important;
+}
+
+.modal {
+    z-index: 1041;
+}
+.main-body .page-wrapper{
+    padding: 0px;
+}
+
+
+/*
+--------------------------------------------------------------------------------
+    Datatable Design part
+--------------------------------------------------------------------------------
+*/
+.dataTables_wrapper .dataTables_filter input, .dataTables_wrapper .dataTables_length select {
+    border:1px solid #ddd;
+    height:35px;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+.dataTables_wrapper .dataTables_paginate{
+    padding:0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+    margin-left: 0px;
+    border-right:1px solid #ccc;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current{
+    background: #01a9ac !important;
+    border-color: #01a9ac;
+    color:#fff !important;
+}
+
+.ck-rounded-corners .ck.ck-balloon-panel, .ck.ck-balloon-panel.ck-rounded-corners {
+    z-index: 10055 !important;
+}
+.ck.ck-reset_all input{position: relative;  z-index: 10056 !important;} 
+
+
+
+
