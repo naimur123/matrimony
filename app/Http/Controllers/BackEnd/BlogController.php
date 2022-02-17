@@ -31,12 +31,12 @@ class BlogController extends Controller
     /**
      * Show Blog List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('Blog List');
+        // $this->addMonitoring('Blog List');
         $params = [
             'nav'               => 'blog',
             'subNav'            => 'blog.list',
@@ -71,9 +71,9 @@ class BlogController extends Controller
             }else{
                 $this->addMonitoring('Create Blog','Update');
                 $data = Blog::withTrashed()->where('slug', $request->slug)->first();
-                $data->modified_by = Auth::guard('admin')->user()->id;                
+                $data->modified_by = Auth::guard('admin')->user()->id;
             }
-            
+
             $data->slug = $this->getSlug($request->title, $data, boolval($request->slug) );
             $data->title = $request->title;
             $data->blog_category_id  = $request->blog_category_id ;
@@ -161,11 +161,11 @@ class BlogController extends Controller
      * Show Archive Blog List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
+
         $this->addMonitoring('Blog Archive List');
         $params = [
             'nav'               => 'Blog',
@@ -190,16 +190,16 @@ class BlogController extends Controller
         }else{
             $data = Blog::onlyTrashed()->orderBy('id', 'ASC')->get();
         }
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return $row->createdBy->name; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return $row->createdBy->name; })
             ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             ->editcolumn('image_path', function($row){ return '<img src="'.asset($row->image_path).'" height="60">'; })
             ->addColumn('status', function($row){
                 return $row->status == 'published' ? '<span class="badge badge-success">'.$row->status.'</span>' : '<span class="badge badge-warning">'.$row->status.'</span>';
             })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 $li = '<a href="'.route('blog.view',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li .= '<a href="'.route('blog.edit',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 if($type == 'list'){

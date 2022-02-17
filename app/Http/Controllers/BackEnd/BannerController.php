@@ -31,12 +31,12 @@ class BannerController extends Controller
     /**
      * Show Banner List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('Banner List');
+        // $this->addMonitoring('Banner List');
         $params = [
             'nav'               => 'banner',
             'subNav'            => 'banner.list',
@@ -54,7 +54,7 @@ class BannerController extends Controller
      * Create New Banner
      */
     public function create(){
-        $this->addMonitoring('Create Banner');
+        // $this->addMonitoring('Create Banner');
         return view('backEnd.banner.create')->render();
     }
 
@@ -64,11 +64,11 @@ class BannerController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create Banner','Add');
+                // $this->addMonitoring('Create Banner','Add');
                 $data = new Banner();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create Banner','Update');
+                // $this->addMonitoring('Create Banner','Update');
                 $data = Banner::withTrashed()->where('slug', $request->slug)->first();
                 $data->modified_by = Auth::guard('admin')->user()->id;
             }
@@ -89,16 +89,16 @@ class BannerController extends Controller
      * Edit Banner Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit Banner');
+        // $this->addMonitoring('Edit Banner');
         $data = Banner::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.Banner.create',['data' => $data])->render();
     }
 
     /**
-     * Show Banner Profile 
+     * Show Banner Profile
      */
     public function showProfile(Request $request){
-        $this->addMonitoring('View Banner Profile');
+        // $this->addMonitoring('View Banner Profile');
         $data = Banner::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.Banner.profile',['data' => $data])->render();
     }
@@ -108,7 +108,7 @@ class BannerController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('Banner List','Make Archive', 'active', 'archive');
+            // $this->addMonitoring('Banner List','Make Archive', 'active', 'archive');
             $data = Banner::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -123,7 +123,7 @@ class BannerController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('Banner Archive List', 'Make active', 'archive', 'active');
+            // $this->addMonitoring('Banner Archive List', 'Make active', 'archive', 'active');
             $data = Banner::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('Banner Restore Successfully');
@@ -137,12 +137,12 @@ class BannerController extends Controller
      * Show Archive Banner List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
-        $this->addMonitoring('Banner Archive List');
+
+        // $this->addMonitoring('Banner Archive List');
         $params = [
             'nav'               => 'banner',
             'subNav'            => 'banner.archive_list',
@@ -166,17 +166,17 @@ class BannerController extends Controller
         }else{
             $data = Banner::onlyTrashed()->orderBy('id', 'ASC')->get();
         }
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return $row->createdBy->name; })           
-            ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return $row->createdBy->name; })
+            ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             ->editcolumn('link', function($row){ return empty($row->link) ? 'N/A' : '<a href="'.$row->link.'" target="_blank"> Link </a>'; })
             ->editcolumn('image_path', function($row){ return '<img src="'.asset($row->image_path).'" height="60">'; })
             ->addColumn('status', function($row){
                 return $row->status == 'published' ? '<span class="badge badge-success">'.$row->status.'</span>' : '<span class="badge badge-warning">'.$row->status.'</span>';
             })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 // $li = '<a href="'.route('Banner.profile',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li = '<a href="'.route('banner.edit',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 if($type == 'list'){

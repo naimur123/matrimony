@@ -1,6 +1,7 @@
-<?php 
+<?php
 
 namespace App\Http\Components;
+
 
 use App\AdminMonitoring;
 use Illuminate\Support\Facades\Auth;
@@ -18,5 +19,6 @@ trait Monitoring{
         $data->from_status = $from_status;
         $data->to_status = $to_status;
         $data->save();
+        return $this->addMonitoring($data);
     }
 }

@@ -2,11 +2,11 @@
 	<style>
 		.navbar-default{background-color: transparent !important; background-image: none;}
 		.banner{margin-top: -125px;}
-		.navbar-brand img{height:120px;}
+		.navbar-brand img{height: 100px;width:65px}
 		.navbar-default .navbar-nav > li > a{ color:#fff; font-size: 15px;display: inline !important; float: right;}
 		.nav > li > a:hover, .nav > li > a:focus{background: none !important;}
 		.navbar-nav{ position: absolute; right: 80px; top: 30px; }
-		
+
 		@media (max-width:767px){
 			.navbar-nav{ position: absolute; right: 50px; top: 20px; }
 			.navbar-default .navbar-nav > li > a{ color:#fff; font-size: 13px;display: inline !important; float: right}
@@ -14,7 +14,7 @@
 	</style>
 @else
 <style>
-	.navbar-brand img{height:60px;}
+	/* .navbar-brand img{height:100px; weight: 105px; } */
 	.banner-form{padding-top:30%;padding-bottom:50px;}
 </style>
 @endif
@@ -30,16 +30,16 @@
 			<span class="icon-bar"></span>
 		</button>
 		<a class="navbar-brand" href="{{ url('/')}}">
-			<img src="{{ isset($system->logo) ? asset($system->logo) : Null }}" alt="{{env('APP_NAME')}}" >
+			<img src="{{ isset($system->logo) ? asset($system->logo) : Null }}" alt="{{env('APP_NAME')}}" style="height: 110px; width: 100px;" >
 		</a>
-		
+
 	  </div>
-  
+
 	  <!-- Collect the nav links, forms, and other content for toggling -->
 	  <div class="{{ !Auth::user() && isset($index_page) ? Null : 'collapse navbar-collapse' }}" id="bs-example-navbar-collapse-1">
-	      
-	   
-	      
+
+
+
 		<ul class="nav navbar-nav">
 			@guest
 				{{-- <li><a href="{{ url('/register) }}" ><i class="fa fa-edit"></i> Register</a></li> --}}
@@ -50,15 +50,15 @@
 					<li><a href="{{ url('/our-service')}}">Our service</a></li>
 					<li><a href="{{ url('/login') }}" class="user-auth" ><i class="fas fa-user-circle"></i> Login <i class="fas fa-angle-down"></i> </a></li>
 					<li><a href="{{ url('/register') }}" class="user-auth user-register" ><i class="fas fa-edit"></i> Register </a></li>
-				@else				    
+				@else
 					<li>
-					    <a style="font-size:22px;color:white;font-weight: bold;margin-bottom: -60px;margin-top: -30px;"> [ Hotline: +8801722063276 ]</a> <br/>
+					    {{-- <a style="font-size:22px;color:white;font-weight: bold;margin-bottom: -60px;margin-top: -30px;"> [ Hotline: +8801722063276 ]</a> <br/> --}}
 						<a style="font-size:22px;" href="{{ url('/login') }}" class="user-auth" ><i class="fas fa-user-circle"></i> Login <i class="fas fa-angle-down"></i> </a>
 						<a style="font-size:22px;" href="{{ url('/register') }}" class="user-auth user-register" ><i class="fas fa-edit"></i> Register </a>
 					</li>
 				@endif
 			@else
-				<li><a href="{{ url('/home')}}">Home</a></li>				
+				<li><a href="{{ url('/home')}}">Home</a></li>
 				<li><a href="{{ url('/packages')}}">Packages</a></li>
 				<li><a href="{{ url('/advance-search') }}">Advance Search</a></li>
 				<li class="dropdown">
@@ -68,7 +68,7 @@
 							@if( $message->from_id == Auth::user()->id )
 								<li>
 									<a class="list-group-item chat-list" href=":javascript;" data-name="MMBD-{{$message->toUser->id}}" data-to_id="{{$message->toUser->id}}"  title="MMBD-{{ $message->toUser->id }}">
-										<img src="{{ isset($message->toUser->profilePic) && file_exists($message->toUser->profilePic->image_path) ? asset($message->toUser->profilePic->image_path) : asset('dummy-user.png') }}" width="25" class="img-circle"> &nbsp; 
+										<img src="{{ isset($message->toUser->profilePic) && file_exists($message->toUser->profilePic->image_path) ? asset($message->toUser->profilePic->image_path) : asset('dummy-user.png') }}" width="25" class="img-circle"> &nbsp;
 											MMBD-{{ $message->toUser->id }}
 										<div class="online-signal"></div>
 										<div class="clearfix"></div>
@@ -77,24 +77,24 @@
 							@else
 								<li>
 									<a class="list-group-item chat-list" href=":javascript;" data-name="MMBD-{{$message->fromUser->id}}" data-to_id="{{$message->fromUser->id}}"  title="MMBD-{{ $message->fromUser->id }}">
-										<img src="{{ isset($message->fromUser->profilePic) && file_exists($message->fromUser->profilePic->image_path) ? asset($message->fromUser->profilePic->image_path) : asset('dummy-user.png') }}" width="25" class="img-circle"> &nbsp; 
+										<img src="{{ isset($message->fromUser->profilePic) && file_exists($message->fromUser->profilePic->image_path) ? asset($message->fromUser->profilePic->image_path) : asset('dummy-user.png') }}" width="25" class="img-circle"> &nbsp;
 											MMBD-{{ $message->fromUser->id }}
 										<div class="online-signal"></div>
 										<div class="clearfix"></div>
 									</a>
 								</li>
 							@endif
-						
+
 						@endforeach
 					</ul>
-				</li>				
+				</li>
 				<li><a href="{{ url('/notification/list')}}">Notification <span class="badge">{{ count(Auth::user()->newNotification) }}</span></a></li>
 				<li><a href="{{ url('/profile')}}"><i class="fa fa-user"></i> Profile</a></li>
-				<li><a href="{{ url('/connected')}}">Connected</a></li>						
+				<li><a href="{{ url('/connected')}}">Connected</a></li>
 				<li class="last"><a href="{{ url('/contact')}}">Contacts</a></li>
 				<li><a href="{{ url('/logout')}}"><i class="fa fa-sign-out"></i> Logout</a></li>
 			@endguest
-		</ul>		
+		</ul>
 	  </div><!-- /.navbar-collapse -->
 	</div><!-- /.container-fluid -->
   </nav>

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Artisan;
 use Intervention\Image\Facades\Image;
 
 trait FileUpload {
-    
+
     /*
      * Define Directories
      */
@@ -42,7 +42,7 @@ trait FileUpload {
 
         if(!is_dir($dir)){
             mkdir($dir,0777,true);
-        }        
+        }
 
         if(!file_exists($dir.'index.php')){
             $file = fopen($dir.'index.php','w');
@@ -50,7 +50,7 @@ trait FileUpload {
             fclose($file);
         }
     }
-    
+
     /*
      * ---------------------------------------------
      * Check the file If exists then Delete the file
@@ -61,12 +61,12 @@ trait FileUpload {
             unlink($filePath);
         }
     }
-    
+
     /*
      * ---------------------------------------------
      * Upload an Image
      * Change Image height and width
-     * Send the null value in height or width to keep 
+     * Send the null value in height or width to keep
      * the Image Orginal Ratio.
      * ---------------------------------------------
      */
@@ -99,7 +99,7 @@ trait FileUpload {
 
 
 
-    
+
     /*
      * ---------------------------------------------
      * Upload any Kind of file
@@ -111,10 +111,10 @@ trait FileUpload {
         }
         ini_set('memory_limit', '1024M');
         $this->CheckDir($dir);
-        $this->RemoveFile($oldFile); 
-        $file = $request->file($fileName);  
+        $this->RemoveFile($oldFile);
+        $file = $request->file($fileName);
         $Newfilename = 'file_'.time().'.'.$file->getClientOriginalExtension();
-        $file->move($dir, $Newfilename); 
+        $file->move($dir, $Newfilename);
         return $dir.$Newfilename;
     }
 
@@ -123,11 +123,11 @@ trait FileUpload {
      */
     protected function rotateImage($image, $deg = 90){
         $dir = explode('.', $image)[0].'1.' . explode('.', $image)[1];
-        Image::make($image)->rotate($deg)->save($dir);        
-        $this->RemoveFile($image);        
+        Image::make($image)->rotate($deg)->save($dir);
+        $this->RemoveFile($image);
         return $dir;
     }
-    
+
     /**
      * ------------------------------------------------------------
      * Upload Multiple Image
@@ -155,13 +155,13 @@ trait FileUpload {
                     })->save($path);
                 }else{
                     Image::make($image)->resize($width,$height)->save($path);
-                }                
+                }
                 $allImage[$count] = $path;
                 $count++;
             }
             return $allImage;
         }
     }
-    
-    
+
+
 }

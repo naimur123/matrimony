@@ -13,7 +13,7 @@ class WebsiteSettingsController extends Controller
      * Create Website Settings
      */
     public function create(){
-        $this->addMonitoring('Website Settings');
+        // $this->addMonitoring('Website Settings');
         $params = ['nav' => 'admin', 'subNav' => 'admin.website.setting'];
         return view('backEnd.admin.settings', $params);
     }
@@ -23,7 +23,7 @@ class WebsiteSettingsController extends Controller
      */
     public function store(Request $request){
         try{
-            $this->addMonitoring('Website Settings','Update');
+            // $this->addMonitoring('Website Settings','Update');
             $system = SystemInfo::first();
             if( empty($system) ){
                 $system = new SystemInfo();
@@ -43,7 +43,7 @@ class WebsiteSettingsController extends Controller
             $system->favicon = $this->UploadImage($request, 'favicon', $this->logo_dir, 35, 35, $system->favicon);
             $system->save();
             $this->success('Website Settings Info Added Successfully', false, false, false, true);
-    
+
         }catch(Exception $e){
             $this->message = $this->getError($e);
         }

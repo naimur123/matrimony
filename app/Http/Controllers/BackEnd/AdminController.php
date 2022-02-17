@@ -35,12 +35,12 @@ class AdminController extends Controller
     /**
      * Show Admin List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('Admin List');
+        // $this->addMonitoring('Admin List');
         $params = [
             'nav'               => 'admin',
             'subNav'            => 'admin.list',
@@ -106,16 +106,16 @@ class AdminController extends Controller
      * Edit Admin Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit Admin');
+        // $this->addMonitoring('Edit Admin');
         $data = Admin::withTrashed()->find($request->id);
         return view('backEnd.admin.create',['data' => $data])->render();
     }
 
     /**
-     * Show Admin Profile 
+     * Show Admin Profile
      */
     public function showProfile(Request $request){
-        $this->addMonitoring('View Admin Profile');
+        // $this->addMonitoring('View Admin Profile');
         $data = Admin::withTrashed()->find($request->id);
         return view('backEnd.admin.profile',['data' => $data])->render();
     }
@@ -125,7 +125,7 @@ class AdminController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('Admin List','Make Archive', 'active', 'archive');
+            // $this->addMonitoring('Admin List','Make Archive', 'active', 'archive');
             $data = Admin::withTrashed()->find($request->id);
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -140,7 +140,7 @@ class AdminController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('Admin Archive List', 'Make active', 'archive', 'active');
+            // $this->addMonitoring('Admin Archive List', 'Make active', 'archive', 'active');
             $data = Admin::withTrashed()->find($request->id);
             $data->restore();
             $this->success('Admin Restore Successfully');
@@ -154,12 +154,12 @@ class AdminController extends Controller
      * Show Archive Admin List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
-        $this->addMonitoring('Admin Archive List');
+
+        // $this->addMonitoring('Admin Archive List');
         $params = [
             'nav'               => 'admin',
             'subNav'            => 'admin.archive_list',
@@ -185,9 +185,9 @@ class AdminController extends Controller
         }
 
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; })            
+            ->addColumn('index', function(){ return ++$this->index; })
             ->addcolumn('role', function($row){ return ucfirst(str_replace('_',' ', $row->user_type)); })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 $li = '<a href="'.route('admin.profile',['id' => $row->id]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li .= '<a href="'.route('admin.edit',['id' => $row->id]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 if($type == 'list'){
@@ -242,10 +242,10 @@ class AdminController extends Controller
     public function getMonitoringDataTable(){
         $data = AdminMonitoring::orderBy('id', 'desc')->get();
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
+            ->addColumn('index', function(){ return ++$this->index; })
             ->addColumn('name', function($row){ return $row->admin->name; })
             ->editColumn('created_at', function($row){ return Carbon::parse($row->created_at)->diffForHumans(); } )
             ->make(true);
     }
-    
+
 }

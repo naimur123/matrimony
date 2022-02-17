@@ -27,6 +27,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
+use App\Traits\Monitoring;
+use App\AdminMonitoring;
+
 class UserController extends Controller
 {
     use Profile;
@@ -49,12 +52,11 @@ class UserController extends Controller
     /**
      * Show user List  without Archive
      */
-    public function index(Request $request){        
-        if( $request->ajax() ){            
+    public function index(Request $request){
+        if( $request->ajax() ){
             return $this->getDataTable($request);
         }
-
-        $this->addMonitoring('User List');
+        // $this->addMonitoring('User List');
         $params = [
             'nav'               => 'user',
             'subNav'            => 'user.list',
@@ -75,11 +77,12 @@ class UserController extends Controller
         return view('backEnd.user.table', $params);
     }
 
+
     /**
      * Create New user
      */
     public function create(){
-        $this->addMonitoring('Create user');
+        // $this->addMonitoring('Create user');
         $prams['religions'] = Religious::where('status','published')->orderBy('name', 'ASC')->get();
         $prams['religious_casts'] = ReligiousCast::where('status','published')->orderBy('religious_id', 'ASC')->get();
         $prams['professions'] = CareerProfessional::where('status','published')->orderBy('name', 'ASC')->get();
@@ -178,7 +181,7 @@ class UserController extends Controller
                 $userImage->image_path = $this->UploadImage($request, 'image_path', $this->client_images_dir, 150, Null, Null);
                 $userImage->profile_pic = true;
                 $userImage->save();
-            }            
+            }
             try{
                 event(new Registered($data));
                 $message = $this->getRegisterSuccessfullyMessage($request->password, $request->email);
@@ -201,22 +204,22 @@ class UserController extends Controller
     protected function ProfileVerifiedMessage(){
         $system = SystemInfo::first();
         $message = '
-            <div>                
+            <div>
                 <div>
                     <img src="'.asset($system->logo).'" style="height: 80px;">
                 </div>
                 <h3 style="margin: 0px 0px 10px 0px; color: #fff; font-size: 22px; background: #dd2476; padding: 5px 0px 5px 15px;">
                 Great! Your profile has been verified.
                     <span style="font-size: 14px; padding: 10px; float: right; margin-top:-5px;">'.date('d-M-Y').'</span>
-                </h3>                
+                </h3>
             </div>
 
             <!-- Body Content -->
             <div style="padding: 15px;">
                 Your profile has been verified successfully.<br><br>
                 <img src="'.asset('image.png').'"><br><br>
-                All the best for your Partner Search!    
-                
+                All the best for your Partner Search!
+
             </div>
         ';
         return $message;
@@ -230,22 +233,22 @@ class UserController extends Controller
     protected function passwordChangeMessage($password){
         $system = SystemInfo::first();
         $message = '
-            <div>                
+            <div>
                 <div>
                     <img src="'.asset($system->logo).'" style="height: 80px;">
                 </div>
                 <h3 style="margin: 0px 0px 10px 0px; color: #fff; font-size: 22px; background: #dd2476; padding: 5px 0px 5px 15px;">
                     Account Password reset.
                     <span style="font-size: 14px; padding: 10px; float: right; margin-top:-5px;">'.date('d-M-Y').'</span>
-                </h3>                
+                </h3>
             </div>
 
             <!-- Body Content -->
             <div style="padding: 15px;">
                 Your password has been changeed successfully.<br>
-                Your New Password is: '.$password.'<br><br>                
-                All the best for your Partner Search!    
-                
+                Your New Password is: '.$password.'<br><br>
+                All the best for your Partner Search!
+
             </div>
         ';
         return $message;
@@ -255,7 +258,7 @@ class UserController extends Controller
      * Edit user Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit user');
+        // $this->addMonitoring('Edit user');
         $prams['data'] = User::withTrashed()->where('id', $request->id)->first();
         $prams['religions'] = Religious::where('status','published')->orderBy('name', 'ASC')->get();
         $prams['religious_casts'] = ReligiousCast::where('status','published')->orderBy('religious_id', 'ASC')->get();
@@ -284,7 +287,7 @@ class UserController extends Controller
             DB::beginTransaction();
             $this->addMonitoring('Change User Status','Update');
             $data = User::withTrashed()->where('id', $request->id)->first();
-            $data->modified_by = Auth::guard('admin')->user()->id;        
+            $data->modified_by = Auth::guard('admin')->user()->id;
             if( $request->user_status != $data->user_status && $request->user_status == 1){
                 try{
                     $message = $this->ProfileVerifiedMessage();
@@ -310,7 +313,7 @@ class UserController extends Controller
      * Change Password Page Show
      */
     public function showChangePassword(Request $request){
-        $this->addMonitoring('User password change');
+        // $this->addMonitoring('User password change');
         $prams['data'] = User::withTrashed()->where('id', $request->id)->first();
         return view('backEnd.user.changePassword', $prams)->render();
     }
@@ -331,16 +334,16 @@ class UserController extends Controller
             DB::beginTransaction();
             $this->addMonitoring('Change Password','Update');
             $data = User::withTrashed()->where('id', $request->id)->first();
-            $data->modified_by = Auth::guard('admin')->user()->id; 
+            $data->modified_by = Auth::guard('admin')->user()->id;
 
-            
+
             try{
                 $message = $this->passwordChangeMessage($request->password);
                 AccountNotification::dispatch($data->email, 'Password Reset', $message)->delay(1);
             }catch(Exception $e){
                 //
             }
-            
+
             $data->password = bcrypt($request->password);
             $data->comments = $request->comments;
             $data->save();
@@ -354,10 +357,10 @@ class UserController extends Controller
     }
 
     /**
-     * Show user Profile 
+     * Show user Profile
      */
     public function showProfile(Request $request){
-        $this->addMonitoring('View user Profile');
+        // $this->addMonitoring('View user Profile');
         $data = User::withTrashed()->where('id', $request->id)->first();
         return view('backEnd.user.profile',['data' => $data])->render();
     }
@@ -365,7 +368,7 @@ class UserController extends Controller
     /**
      * Download Bio Data
      */
-    public function downloadBio(Request $request){        
+    public function downloadBio(Request $request){
         $data = User::withTrashed()->where('id', $request->id)->first();
         if( file_exists($data->user_bio_data_path) ){
             return response()->download($data->user_bio_data_path);
@@ -378,7 +381,7 @@ class UserController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('user List','Make Archive', 'active', 'archive');
+            // $this->addMonitoring('user List','Make Archive', 'active', 'archive');
             $data = User::withTrashed()->where('id', $request->id)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -393,7 +396,7 @@ class UserController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('user Archive List', 'Make active', 'archive', 'active');
+            // $this->addMonitoring('user Archive List', 'Make active', 'archive', 'active');
             $data = User::withTrashed()->where('id', $request->id)->first();
             $data->restore();
             $this->success('user Restore Successfully');
@@ -407,12 +410,12 @@ class UserController extends Controller
      * Show Archive user List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable($request, 'archive');
         }
-        
-        $this->addMonitoring('user Archive List');
+
+        // $this->addMonitoring('user Archive List');
         $params = [
             'nav'               => 'user',
             'subNav'            => 'user.archive_list',
@@ -440,7 +443,7 @@ class UserController extends Controller
     protected function getDataTable(Request $request, $type = 'list'){
 
         if( $type == "list" ){
-            $data = User::orderBy('id', 'DESC');            
+            $data = User::orderBy('id', 'DESC');
         }else{
             $data = User::onlyTrashed()->orderBy('id', 'DESC');
         }
@@ -506,12 +509,12 @@ class UserController extends Controller
                 }
             });
         }
-        
 
-        if( !empty($request->partner_min_age) && !empty($request->partner_max_age) ){          
+
+        if( !empty($request->partner_min_age) && !empty($request->partner_max_age) ){
             $data->whereBetween('date_of_birth', $this->getDOBRange($request->partner_min_age-1, $request->partner_max_age+1) );
         }
-        
+
         if( !empty($request->part_min_feet) && !empty($request->part_max_feet) ){
             $min = $this->calculateHeight($request, 'part_min_feet', 'part_min_inch');
             $max = $this->calculateHeight($request, 'part_max_feet', 'part_max_inch');
@@ -520,9 +523,9 @@ class UserController extends Controller
 
         $data = $data->get();
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return empty($row->createdBy) ? 'N/A' : $row->createdBy->name; })           
-            ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return empty($row->createdBy) ? 'N/A' : $row->createdBy->name; })
+            ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             ->addcolumn('name', function($row){ return $row->first_name . ' ' . $row->last_name; })
             ->addcolumn('gender', function($row){ return $row->gender == "M" ? 'Male' : 'Female'; })
             ->addcolumn('marital_status', function($row){
@@ -554,10 +557,10 @@ class UserController extends Controller
                 }
             })
             ->addColumn('action',function($row) use($type){
-                return $this->getUserActionOptions($row, $type);            
+                return $this->getUserActionOptions($row, $type);
             })
             ->rawColumns(['action', 'image','status'])
-            ->make(true);   
+            ->make(true);
     }
 
 
@@ -602,9 +605,9 @@ class UserController extends Controller
     protected function getAccessLogDataTable(){
         $data = Visitor::where('user_id', '!=', Null)->orderBy('id', 'DESC')->get();
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->addColumn('name', function($row){ return $row->user->first_name.' '.$row->user->last_name; }) 
-            ->addColumn('phone', function($row){ return $row->user->phone; }) 
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->addColumn('name', function($row){ return $row->user->first_name.' '.$row->user->last_name; })
+            ->addColumn('phone', function($row){ return $row->user->phone; })
             ->addColumn('time', function($row){ return Carbon::parse($row->updated_at)->diffForHumans(); })
             ->make(true);
     }
@@ -642,8 +645,8 @@ class UserController extends Controller
         try{
             $user_image = UserImage::findOrFail($request->id);
             $user_image->image_path = $this->rotateImage($user_image->image_path);
-            $user_image->save();          
-            $this->html_page = $this->showImages($user_image->user_id);           
+            $user_image->save();
+            $this->html_page = $this->showImages($user_image->user_id);
             $this->success('Image Rotated Successfully');
             $this->table="true";
         }catch(Exception $e){
@@ -666,7 +669,7 @@ class UserController extends Controller
                     $data->user_id = $user->id;
                     $data->image_path = $image;
                     $data->save();
-                } 
+                }
             }
             try{
                 $user->user_bio_data_path = $this->uploadFile($request, 'user_bio_data_path', $this->file_dir, $user->user_bio_data_path);
@@ -675,7 +678,7 @@ class UserController extends Controller
             }catch(Exception $e){
 
             }
-            $user->save();        
+            $user->save();
             $this->success('Documents Added Successfully');
             $this->html_page = $this->showImages($user->id);
             $this->modal = false;
@@ -683,5 +686,5 @@ class UserController extends Controller
             $this->message = $this->getError($e);
         }
         return $this->output();
-    } 
+    }
 }

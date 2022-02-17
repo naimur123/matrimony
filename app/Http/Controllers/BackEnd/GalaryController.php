@@ -30,12 +30,12 @@ class GalaryController extends Controller
     /**
      * Show Galary List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('Galary List');
+        //$this->addMonitoring('Galary List');
         $params = [
             'nav'               => 'galary',
             'subNav'            => 'galary.list',
@@ -53,7 +53,7 @@ class GalaryController extends Controller
      * Create New Galary
      */
     public function create(){
-        $this->addMonitoring('Create Galary');
+        //$this->addMonitoring('Create Galary');
         return view('backEnd.galary.create')->render();
     }
 
@@ -63,13 +63,13 @@ class GalaryController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create Galary','Add');
+                //$this->addMonitoring('Create Galary','Add');
                 $data = new Galary();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create Galary','Update');
+                //$this->addMonitoring('Create Galary','Update');
                 $data = Galary::withTrashed()->where('slug', $request->slug)->first();
-                $data->modified_by = Auth::guard('admin')->user()->id;                
+                $data->modified_by = Auth::guard('admin')->user()->id;
             }
             $data->slug = $this->getSlug($request->title, $data, boolval($request->slug) );
             $data->title = $request->title;
@@ -88,7 +88,7 @@ class GalaryController extends Controller
      * Edit Galary Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit Galary');
+        //$this->addMonitoring('Edit Galary');
         $data = Galary::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.galary.create',['data' => $data])->render();
     }
@@ -99,7 +99,7 @@ class GalaryController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('Galary List','Make Archive', 'active', 'archive');
+           // $this->addMonitoring('Galary List','Make Archive', 'active', 'archive');
             $data = Galary::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -114,7 +114,7 @@ class GalaryController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('Galary Archive List', 'Make active', 'archive', 'active');
+            //$this->addMonitoring('Galary Archive List', 'Make active', 'archive', 'active');
             $data = Galary::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('Galary Restore Successfully');
@@ -129,7 +129,7 @@ class GalaryController extends Controller
      */
     public function delete(Request $request){
         try{
-            $this->addMonitoring('Galary Archive List', 'Make active', 'archive', 'delete');
+            //$this->addMonitoring('Galary Archive List', 'Make active', 'archive', 'delete');
             $data = Galary::withTrashed()->where('slug', $request->slug)->first();
             $this->RemoveFile($data->image_path);
             $data->forceDelete();
@@ -144,12 +144,12 @@ class GalaryController extends Controller
      * Show Archive Galary List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
-        $this->addMonitoring('Galary Archive List');
+
+        //$this->addMonitoring('Galary Archive List');
         $params = [
             'nav'               => 'galary',
             'subNav'            => 'galary.archive_list',
@@ -173,16 +173,16 @@ class GalaryController extends Controller
         }else{
             $data = Galary::onlyTrashed()->orderBy('id', 'ASC')->get();
         }
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return $row->createdBy->name; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return $row->createdBy->name; })
             ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             ->editcolumn('image_path', function($row){ return '<img src="'.asset($row->image_path).'" height="60">'; })
             ->addColumn('status', function($row){
                 return $row->status == 'published' ? '<span class="badge badge-success">'.$row->status.'</span>' : '<span class="badge badge-warning">'.$row->status.'</span>';
             })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 // $li = '<a href="'.route('Galary.profile',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li = '<a href="'.route('galary.edit',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 if($type == 'list'){

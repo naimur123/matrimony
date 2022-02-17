@@ -39,7 +39,7 @@
   </div>
 
   <!--Register Helper Form -->
-  <div class="container" style="margin: -95px auto;">
+  <div class="container" style="margin: -135px auto;">
 
     <form id="home-form" class="row" >
       <!-- Looking for -->
@@ -143,13 +143,13 @@
   <div class="grid_2" style="margin-top: 30px;">
     <div class="container">
       <div class="row">
-        <div class="col-sm-12" style="margin-top: 20px;"><h2 class="text-center">Find your Special Someone</h2></div>
+        <div class="col-sm-12" style="margin-top: 45px;"><h2 class="text-center"  style="color:#c21038">Find your Special Someone</h2></div>
       </div>
       <div class="row" style="margin-top: 30px;">
         <div class="col-sm-4 text-center">
             <div class="circle-box" >
               <a href="{{ url('/register') }}"  class="user-auth text-info">
-                <img src="{{ asset('signup.png') }}" class="img-responsive  img-circle" >
+                <img src="{{ asset('Image-01.png') }}" class="img-responsive  img-circle" >
               </a>
             </div>
             <br>
@@ -160,7 +160,7 @@
         <div class="col-sm-4 text-center">
           <div class="circle-box" >
             <a href="{{ url('/register') }}"  class="user-auth text-info" >
-              <img src="{{ asset('connect.png') }}" class="img-responsive img-circle" >
+              <img src="{{ asset('Image-02.png') }}" class="img-responsive img-circle" >
             </a>
           </div>
           <br>
@@ -171,7 +171,7 @@
         <div class="col-sm-4 text-center">
           <div class="circle-box" >
             <a href="{{ url('/register') }}"  class="user-auth text-info" >
-              <img src="{{ asset('interact.png') }}" class="img-responsive img-circle" >
+              <img src="{{ asset('Image-03.png') }}" class="img-responsive img-circle" >
             </a>
           </div>
           <br>
