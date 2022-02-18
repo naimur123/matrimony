@@ -30,12 +30,12 @@ class TramsRegulationController extends Controller
     /**
      * Show tramsRegulation List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('tramsRegulation List');
+        //$this->addMonitoring('tramsRegulation List');
         $params = [
             'nav'               => 'tramsRegulation',
             'subNav'            => 'tramsRegulation.list',
@@ -53,7 +53,7 @@ class TramsRegulationController extends Controller
      * Create New tramsRegulation
      */
     public function create(){
-        $this->addMonitoring('Create tramsRegulation');
+        //$this->addMonitoring('Create tramsRegulation');
         return view('backEnd.tramsRegulation.create')->render();
     }
 
@@ -63,13 +63,13 @@ class TramsRegulationController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create tramsRegulation','Add');
+                //$this->addMonitoring('Create tramsRegulation','Add');
                 $data = new TermsRegulation();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create tramsRegulation','Update');
+                //$this->addMonitoring('Create tramsRegulation','Update');
                 $data = TermsRegulation::withTrashed()->where('slug', $request->slug)->first();
-                $data->modified_by = Auth::guard('admin')->user()->id;            
+                $data->modified_by = Auth::guard('admin')->user()->id;
             }
             $data->slug = $this->getSlug($request->title, $data, boolval($request->slug) );
             $data->title = $request->title;
@@ -89,7 +89,7 @@ class TramsRegulationController extends Controller
      * Edit tramsRegulation Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit tramsRegulation');
+        //$this->addMonitoring('Edit tramsRegulation');
         $data = TermsRegulation::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.tramsRegulation.create',['data' => $data])->render();
     }
@@ -98,7 +98,7 @@ class TramsRegulationController extends Controller
      * tramsRegulation Details view
      */
     public function view(Request $request){
-        $this->addMonitoring('View tramsRegulation');
+        //$this->addMonitoring('View tramsRegulation');
         $data = TermsRegulation::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.tramsRegulation.view',['data' => $data])->render();
     }
@@ -108,7 +108,7 @@ class TramsRegulationController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('tramsRegulation List','Make Archive', 'active', 'archive');
+            //$this->addMonitoring('tramsRegulation List','Make Archive', 'active', 'archive');
             $data = TermsRegulation::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -123,7 +123,7 @@ class TramsRegulationController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('tramsRegulation Archive List', 'Make active', 'archive', 'active');
+            //$this->addMonitoring('tramsRegulation Archive List', 'Make active', 'archive', 'active');
             $data = TermsRegulation::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('Trams & Regulation Restore Successfully');
@@ -138,7 +138,7 @@ class TramsRegulationController extends Controller
      */
     public function delete(Request $request){
         try{
-            $this->addMonitoring('tramsRegulation Archive List', 'Make active', 'archive', 'delete');
+            //$this->addMonitoring('tramsRegulation Archive List', 'Make active', 'archive', 'delete');
             $data = TermsRegulation::withTrashed()->where('slug', $request->slug)->first();
             $this->RemoveFile($data->image_path);
             $data->forceDelete();
@@ -153,12 +153,12 @@ class TramsRegulationController extends Controller
      * Show Archive tramsRegulation List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
-        $this->addMonitoring('tramsRegulation Archive List');
+
+        //$this->addMonitoring('tramsRegulation Archive List');
         $params = [
             'nav'               => 'tramsRegulation',
             'subNav'            => 'tramsRegulation.archive_list',
@@ -182,16 +182,16 @@ class TramsRegulationController extends Controller
         }else{
             $data = TermsRegulation::onlyTrashed()->orderBy('id', 'ASC')->get();
         }
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return $row->createdBy->name; })           
-            ->editColumn('description', function($row){ return substr($row->description, 0 ,50 ).'...'; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return $row->createdBy->name; })
+            ->editColumn('description', function($row){ return substr($row->description, 0 ,50 ).'...'; })
             ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             ->addColumn('status', function($row){
                 return $row->status == 'published' ? '<span class="badge badge-success">'.$row->status.'</span>' : '<span class="badge badge-warning">'.$row->status.'</span>';
             })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 $li = '<a href="'.route('tramsRegulation.view',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li .= '<a href="'.route('tramsRegulation.edit',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 if($type == 'list'){

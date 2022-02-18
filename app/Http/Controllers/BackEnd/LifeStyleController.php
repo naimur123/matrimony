@@ -30,12 +30,12 @@ class LifeStyleController extends Controller
     /**
      * Show life_style List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('Life Style List');
+        //$this->addMonitoring('Life Style List');
         $params = [
             'nav'               => 'life_style',
             'subNav'            => 'life_style.list',
@@ -53,7 +53,7 @@ class LifeStyleController extends Controller
      * Create New life_style
      */
     public function create(){
-        $this->addMonitoring('Create life_style');
+        //$this->addMonitoring('Create life_style');
         return view('backEnd.lifeStyle.create')->render();
     }
 
@@ -63,13 +63,13 @@ class LifeStyleController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create life_style','Add');
+                //$this->addMonitoring('Create life_style','Add');
                 $data = new LifeStyle();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create life_style','Update');
+                //$this->addMonitoring('Create life_style','Update');
                 $data = LifeStyle::withTrashed()->where('slug', $request->slug)->first();
-                $data->modified_by = Auth::guard('admin')->user()->id;            
+                $data->modified_by = Auth::guard('admin')->user()->id;
             }
             $data->slug = $this->getSlug($request->name, $data, boolval($request->slug) );
             $data->name = $request->name;
@@ -88,7 +88,7 @@ class LifeStyleController extends Controller
      * Edit life_style Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit Life Style');
+        //$this->addMonitoring('Edit Life Style');
         $data = LifeStyle::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.lifeStyle.create',['data' => $data])->render();
     }
@@ -97,7 +97,7 @@ class LifeStyleController extends Controller
      * life_style Details view
      */
     public function view(Request $request){
-        $this->addMonitoring('View Life Style');
+        //$this->addMonitoring('View Life Style');
         $data = LifeStyle::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.lifeStyle.view',['data' => $data])->render();
     }
@@ -107,7 +107,7 @@ class LifeStyleController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('Life Style List','Make Archive', 'active', 'archive');
+            //$this->addMonitoring('Life Style List','Make Archive', 'active', 'archive');
             $data = LifeStyle::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -122,7 +122,7 @@ class LifeStyleController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('Life Style Archive List', 'Make active', 'archive', 'active');
+            //$this->addMonitoring('Life Style Archive List', 'Make active', 'archive', 'active');
             $data = LifeStyle::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('Life Style Restore Successfully');
@@ -137,7 +137,7 @@ class LifeStyleController extends Controller
      */
     public function delete(Request $request){
         try{
-            $this->addMonitoring('Life Style Archive List', 'Make active', 'archive', 'delete');
+            //$this->addMonitoring('Life Style Archive List', 'Make active', 'archive', 'delete');
             $data = LifeStyle::withTrashed()->where('slug', $request->slug)->first();
             $this->RemoveFile($data->image_path);
             $data->forceDelete();
@@ -152,12 +152,12 @@ class LifeStyleController extends Controller
      * Show Archive Life Style List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
-        $this->addMonitoring('Life Style Archive List');
+
+        //$this->addMonitoring('Life Style Archive List');
         $params = [
             'nav'               => 'life_style',
             'subNav'            => 'life_style.archive_list',
@@ -181,16 +181,16 @@ class LifeStyleController extends Controller
         }else{
             $data = LifeStyle::onlyTrashed()->orderBy('id', 'ASC')->get();
         }
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return $row->createdBy->name; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return $row->createdBy->name; })
             ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             // ->editcolumn('image_path', function($row){ return '<img src="'.asset($row->image_path).'" height="60">'; })
             ->addColumn('status', function($row){
                 return $row->status == 'published' ? '<span class="badge badge-success">'.$row->status.'</span>' : '<span class="badge badge-warning">'.$row->status.'</span>';
             })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 // $li = '<a href="'.route('life_style.view',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li = '<a href="'.route('life_style.edit',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 if($type == 'list'){

@@ -2,14 +2,14 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-sm-10 col-md-8" style="margin-top:2%;margin-bottom: 2%;">                
+            <div class="col-sm-10 col-md-8" style="margin-top:2%;margin-bottom: 2%;">
                 @if(phpversion() >= 7.2)
                 <div class="card" style="background: #999;opacity:.9; color:#fff;">
                     <div class="card-header">
                         <div class="row">
                             <div class="col-6"> Install </div>
                             <div class="col-6 text-right"> <a href="{{route('login')}}" class="btn btn-sm btn-info">Admin Dashboard</a> </div>
-                        </div> 
+                        </div>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('install') }}" method="POST" class="ajax-form" enctype="multipart/form-data">
@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <!-- Second Row && First Column -->     
+                                <!-- Second Row && First Column -->
                                 <div class="col-md-6">
                                         <label for="phoneNo">Phone Number <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control{{ $errors->has('phoneNo') ? ' is-invalid' : '' }}" name="phoneNo" value="{{ old('phoneNo') }}" required placeholder="Phone Number">
@@ -46,7 +46,7 @@
                                         </span>
                                     @endif
                                 </div>
-                                <!-- Second Row && Second Column -->                            
+                                <!-- Second Row && Second Column -->
                                 <div class="col-md-6">
                                     <label for="email" title="This email will be default email of your website">Email(Show in website) <span class="text-danger">*</span> </label>
                                     <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value=" {{ old('email') }}" required placeholder="Email (This email will be default email of your website)">
@@ -57,20 +57,20 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="form-group row">                            
+                            <div class="form-group row">
                                 <div class="col-md-6">
                                     <label for="city">City</label>
-                                    <input type="text" class="form-control" name="city" value="{{ old('city') }}"  placeholder="City">                                
+                                    <input type="text" class="form-control" name="city" value="{{ old('city') }}"  placeholder="City">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="zipCode">zip /Postal Code</label>
-                                    <input type="text" class="form-control" name="zipCode" value="{{ old('zipCode') }}"  placeholder="zip /Postal Code">                                
+                                    <input type="text" class="form-control" name="zipCode" value="{{ old('zipCode') }}"  placeholder="zip /Postal Code">
                                 </div>
                             </div>
-                            <div class="form-group row">                            
+                            <div class="form-group row">
                                 <div class="col-md-6">
                                     <label for="address">Address</label>
-                                    <input type="text" class="form-control" name="address" placeholder="Address" value="{{ old('address') }}" >                                                             
+                                    <input type="text" class="form-control" name="address" placeholder="Address" value="{{ old('address') }}" >
                                 </div>
                                 <div class="col-md-6">
                                     <label for="country">Country <span class="text-danger">*</span></label>
@@ -85,8 +85,8 @@
                             <div class="form-group row">
                                 <div class="col-md-6">
                                     <label for="state">State</label>
-                                    <input type="text" class="form-control" name="state" placeholder="State" value="{{ old('state') }}" >          
-                                </div>                        
+                                    <input type="text" class="form-control" name="state" placeholder="State" value="{{ old('state') }}" >
+                                </div>
                                 <div class="col-md-6">
                                     <label for="dateFormat">Date Format <span class="text-danger">*</span> </label>
                                     <select name="dateFormat" required class="form-control">
@@ -127,7 +127,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>                                               
+                            </div>
                             <div class="form-group text-right">
                                 <button class="btn btn-primary " type="submit" id ="submit" >Install</button>
                             </div>
@@ -139,8 +139,8 @@
                         To Install this Application you have required php version 7.2.19 or higher. Your current php version is <b>{{ phpversion() }}</b>  .
                         <br>Please install php version <b>7.2.19</b> or higher and try again.
                     </div>
-                @endif                
-            </div>     
+                @endif
+            </div>
         </div>
     </div>
 @endsection

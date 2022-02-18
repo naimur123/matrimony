@@ -30,12 +30,12 @@ class MaritalStatusController extends Controller
     /**
      * Show life_style List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('Marital Status List');
+        //$this->addMonitoring('Marital Status List');
         $params = [
             'nav'               => 'marital_status',
             'subNav'            => 'marital_status.list',
@@ -54,7 +54,7 @@ class MaritalStatusController extends Controller
      * Create New life_style
      */
     public function create(){
-        $this->addMonitoring('Create Marital Status');
+        //$this->addMonitoring('Create Marital Status');
         return view('backEnd.maritalStatus.create')->render();
     }
 
@@ -64,13 +64,13 @@ class MaritalStatusController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create life_style','Add');
+                //$this->addMonitoring('Create life_style','Add');
                 $data = new MaritalStatus();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create life_style','Update');
+                //$this->addMonitoring('Create life_style','Update');
                 $data = MaritalStatus::withTrashed()->where('slug', $request->slug)->first();
-                $data->modified_by = Auth::guard('admin')->user()->id;            
+                $data->modified_by = Auth::guard('admin')->user()->id;
             }
             $data->slug = $this->getSlug($request->name, $data, boolval($request->slug) );
             $data->name = $request->name;
@@ -87,7 +87,7 @@ class MaritalStatusController extends Controller
      * Edit life_style Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit Marital Status');
+        //$this->addMonitoring('Edit Marital Status');
         $data = MaritalStatus::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.maritalStatus.create',['data' => $data])->render();
     }
@@ -96,7 +96,7 @@ class MaritalStatusController extends Controller
      * life_style Details view
      */
     public function view(Request $request){
-        $this->addMonitoring('View Marital Status');
+        //$this->addMonitoring('View Marital Status');
         $data = MaritalStatus::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.maritalStatus.view',['data' => $data])->render();
     }
@@ -106,7 +106,7 @@ class MaritalStatusController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('Marital Status List','Make Archive', 'active', 'archive');
+            //$this->addMonitoring('Marital Status List','Make Archive', 'active', 'archive');
             $data = MaritalStatus::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -121,7 +121,7 @@ class MaritalStatusController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('Marital Status Archive List', 'Make active', 'archive', 'active');
+            //$this->addMonitoring('Marital Status Archive List', 'Make active', 'archive', 'active');
             $data = MaritalStatus::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('Marital Status Restore Successfully');
@@ -136,7 +136,7 @@ class MaritalStatusController extends Controller
      */
     public function delete(Request $request){
         try{
-            $this->addMonitoring('Marital Status Archive List', 'Make active', 'archive', 'delete');
+            //$this->addMonitoring('Marital Status Archive List', 'Make active', 'archive', 'delete');
             $data = MaritalStatus::withTrashed()->where('slug', $request->slug)->first();
             $this->RemoveFile($data->image_path);
             $data->forceDelete();
@@ -151,12 +151,12 @@ class MaritalStatusController extends Controller
      * Show Archive Marital Status List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
-        $this->addMonitoring('Marital Status Archive List');
+
+        //$this->addMonitoring('Marital Status Archive List');
         $params = [
             'nav'               => 'life_style',
             'subNav'            => 'life_style.archive_list',
@@ -180,16 +180,16 @@ class MaritalStatusController extends Controller
         }else{
             $data = MaritalStatus::onlyTrashed()->orderBy('id', 'ASC')->get();
         }
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return $row->createdBy->name; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return $row->createdBy->name; })
             ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             // ->editcolumn('image_path', function($row){ return '<img src="'.asset($row->image_path).'" height="60">'; })
             ->addColumn('status', function($row){
                 return $row->status == 'published' ? '<span class="badge badge-success">'.$row->status.'</span>' : '<span class="badge badge-warning">'.$row->status.'</span>';
             })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 // $li = '<a href="'.route('marital_status.view',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li = '<a href="'.route('marital_status.edit',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 // if($type == 'list'){

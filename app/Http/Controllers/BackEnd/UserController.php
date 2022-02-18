@@ -27,9 +27,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
-use App\Traits\Monitoring;
-use App\AdminMonitoring;
-
 class UserController extends Controller
 {
     use Profile;
@@ -285,7 +282,7 @@ class UserController extends Controller
     public function storeStatusUpdate(Request $request){
         try{
             DB::beginTransaction();
-            $this->addMonitoring('Change User Status','Update');
+            // $this->addMonitoring('Change User Status','Update');
             $data = User::withTrashed()->where('id', $request->id)->first();
             $data->modified_by = Auth::guard('admin')->user()->id;
             if( $request->user_status != $data->user_status && $request->user_status == 1){
@@ -332,7 +329,7 @@ class UserController extends Controller
             }
 
             DB::beginTransaction();
-            $this->addMonitoring('Change Password','Update');
+            // $this->addMonitoring('Change Password','Update');
             $data = User::withTrashed()->where('id', $request->id)->first();
             $data->modified_by = Auth::guard('admin')->user()->id;
 

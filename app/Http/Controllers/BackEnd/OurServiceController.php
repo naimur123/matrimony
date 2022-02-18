@@ -30,12 +30,12 @@ class OurServiceController extends Controller
     /**
      * Show Our Service List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('Our Service List');
+        //$this->addMonitoring('Our Service List');
         $params = [
             'nav'               => 'ourservice',
             'subNav'            => 'ourservice.list',
@@ -53,7 +53,7 @@ class OurServiceController extends Controller
      * Create New Our Service
      */
     public function create(){
-        $this->addMonitoring('Create Our Service');
+        //$this->addMonitoring('Create Our Service');
         return view('backEnd.ourservice.create')->render();
     }
 
@@ -63,13 +63,13 @@ class OurServiceController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create Our Service','Add');
+                //$this->addMonitoring('Create Our Service','Add');
                 $data = new OurService();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create Our Service','Update');
+                //$this->addMonitoring('Create Our Service','Update');
                 $data = OurService::withTrashed()->where('slug', $request->slug)->first();
-                $data->modified_by = Auth::guard('admin')->user()->id;            
+                $data->modified_by = Auth::guard('admin')->user()->id;
             }
             $data->slug = $this->getSlug($request->title, $data, boolval($request->slug) );
             $data->title = $request->title;
@@ -91,7 +91,7 @@ class OurServiceController extends Controller
      * Edit Our Service Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit Our Service');
+        //$this->addMonitoring('Edit Our Service');
         $data = OurService::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.ourservice.create',['data' => $data])->render();
     }
@@ -100,7 +100,7 @@ class OurServiceController extends Controller
      * Our Service Details view
      */
     public function view(Request $request){
-        $this->addMonitoring('View Our Service');
+        //$this->addMonitoring('View Our Service');
         $data = OurService::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.ourservice.view',['data' => $data])->render();
     }
@@ -110,7 +110,7 @@ class OurServiceController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('Our Service List','Make Archive', 'active', 'archive');
+            //$this->addMonitoring('Our Service List','Make Archive', 'active', 'archive');
             $data = OurService::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -125,7 +125,7 @@ class OurServiceController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('Our Service Archive List', 'Make active', 'archive', 'active');
+            //$this->addMonitoring('Our Service Archive List', 'Make active', 'archive', 'active');
             $data = OurService::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('Our Service Restore Successfully');
@@ -140,7 +140,7 @@ class OurServiceController extends Controller
      */
     public function delete(Request $request){
         try{
-            $this->addMonitoring('Our Service Archive List', 'Make active', 'archive', 'delete');
+            //$this->addMonitoring('Our Service Archive List', 'Make active', 'archive', 'delete');
             $data = OurService::withTrashed()->where('slug', $request->slug)->first();
             // $this->RemoveFile($data->image_path);
             $data->forceDelete();
@@ -155,12 +155,12 @@ class OurServiceController extends Controller
      * Show Archive Our Service List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
-        $this->addMonitoring('Our Service Archive List');
+
+        //$this->addMonitoring('Our Service Archive List');
         $params = [
             'nav'               => 'ourservice',
             'subNav'            => 'ourservice.archive_list',
@@ -184,16 +184,16 @@ class OurServiceController extends Controller
         }else{
             $data = OurService::onlyTrashed()->orderBy('id', 'ASC')->get();
         }
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return $row->createdBy->name; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return $row->createdBy->name; })
             ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             // ->editcolumn('image_path', function($row){ return '<img src="'.asset($row->image_path).'" height="60">'; })
             ->addColumn('status', function($row){
                 return $row->status == 'published' ? '<span class="badge badge-success">'.$row->status.'</span>' : '<span class="badge badge-warning">'.$row->status.'</span>';
             })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 $li = '<a href="'.route('ourservice.view',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li .= '<a href="'.route('ourservice.edit',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 if($type == 'list'){

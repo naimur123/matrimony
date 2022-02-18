@@ -58,7 +58,7 @@ class AdminController extends Controller
      * Create New Admin
      */
     public function create(){
-        $this->addMonitoring('Create Admin');
+        //$this->addMonitoring('Create Admin');
         return view('backEnd.admin.create')->render();
     }
 
@@ -78,11 +78,11 @@ class AdminController extends Controller
                     $this->modal = false;
                     return $this->output();
                 }
-                $this->addMonitoring('Create Admin','Add');
+                //$this->addMonitoring('Create Admin','Add');
                 $data = new Admin();
                 $data->created_by = Auth::guard('admin')->user()->name;
             }else{
-                $this->addMonitoring('Create Admin','Update');
+                //$this->addMonitoring('Create Admin','Update');
                 $data = Admin::withTrashed()->find($request->id);
                 $data->modified_by = Auth::guard('admin')->user()->name;
             }

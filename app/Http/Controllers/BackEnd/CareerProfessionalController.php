@@ -30,12 +30,12 @@ class CareerProfessionalController extends Controller
     /**
      * Show careerProfessional List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('Career Professional List');
+        //$this->addMonitoring('Career Professional List');
         $params = [
             'nav'               => 'careerProfessional',
             'subNav'            => 'careerProfessional.list',
@@ -53,7 +53,7 @@ class CareerProfessionalController extends Controller
      * Create New careerProfessional
      */
     public function create(){
-        $this->addMonitoring('Create careerProfessional');
+        //$this->addMonitoring('Create careerProfessional');
         return view('backEnd.careerProfessional.create')->render();
     }
 
@@ -63,13 +63,13 @@ class CareerProfessionalController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create careerProfessional','Add');
+                //$this->addMonitoring('Create careerProfessional','Add');
                 $data = new CareerProfessional();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create careerProfessional','Update');
+                //$this->addMonitoring('Create careerProfessional','Update');
                 $data = CareerProfessional::withTrashed()->where('slug', $request->slug)->first();
-                $data->modified_by = Auth::guard('admin')->user()->id;            
+                $data->modified_by = Auth::guard('admin')->user()->id;
             }
             $data->slug = $this->getSlug($request->name, $data, boolval($request->slug) );
             $data->name = $request->name;
@@ -88,7 +88,7 @@ class CareerProfessionalController extends Controller
      * Edit careerProfessional Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit careerProfessional');
+        //$this->addMonitoring('Edit careerProfessional');
         $data = CareerProfessional::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.careerProfessional.create',['data' => $data])->render();
     }
@@ -97,7 +97,7 @@ class CareerProfessionalController extends Controller
      * careerProfessional Details view
      */
     public function view(Request $request){
-        $this->addMonitoring('View careerProfessional');
+        //$this->addMonitoring('View careerProfessional');
         $data = CareerProfessional::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.careerProfessional.view',['data' => $data])->render();
     }
@@ -107,7 +107,7 @@ class CareerProfessionalController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('careerProfessional List','Make Archive', 'active', 'archive');
+            //$this->addMonitoring('careerProfessional List','Make Archive', 'active', 'archive');
             $data = CareerProfessional::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -122,7 +122,7 @@ class CareerProfessionalController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('careerProfessional Archive List', 'Make active', 'archive', 'active');
+            //$this->addMonitoring('careerProfessional Archive List', 'Make active', 'archive', 'active');
             $data = CareerProfessional::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('careerProfessional Restore Successfully');
@@ -137,7 +137,7 @@ class CareerProfessionalController extends Controller
      */
     public function delete(Request $request){
         try{
-            $this->addMonitoring('careerProfessional Archive List', 'Make active', 'archive', 'delete');
+            //$this->addMonitoring('careerProfessional Archive List', 'Make active', 'archive', 'delete');
             $data = CareerProfessional::withTrashed()->where('slug', $request->slug)->first();
             $this->RemoveFile($data->image_path);
             $data->forceDelete();
@@ -152,12 +152,12 @@ class CareerProfessionalController extends Controller
      * Show Archive careerProfessional List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
-        $this->addMonitoring('careerProfessional Archive List');
+
+        //$this->addMonitoring('careerProfessional Archive List');
         $params = [
             'nav'               => 'careerProfessional',
             'subNav'            => 'careerProfessional.archive_list',
@@ -181,16 +181,16 @@ class CareerProfessionalController extends Controller
         }else{
             $data = CareerProfessional::onlyTrashed()->orderBy('id', 'ASC')->get();
         }
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return $row->createdBy->name; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return $row->createdBy->name; })
             ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             // ->editcolumn('image_path', function($row){ return '<img src="'.asset($row->image_path).'" height="60">'; })
             ->addColumn('status', function($row){
                 return $row->status == 'published' ? '<span class="badge badge-success">'.$row->status.'</span>' : '<span class="badge badge-warning">'.$row->status.'</span>';
             })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 // $li = '<a href="'.route('careerProfessional.view',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li = '<a href="'.route('careerProfessional.edit',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 if($type == 'list'){

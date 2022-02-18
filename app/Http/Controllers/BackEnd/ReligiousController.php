@@ -30,12 +30,12 @@ class ReligiousController extends Controller
     /**
      * Show religious List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('Religious List');
+        //$this->addMonitoring('Religious List');
         $params = [
             'nav'               => 'religious',
             'subNav'            => 'religious.list',
@@ -53,7 +53,7 @@ class ReligiousController extends Controller
      * Create New religious
      */
     public function create(){
-        $this->addMonitoring('Create religious');
+        //$this->addMonitoring('Create religious');
         return view('backEnd.religious.create')->render();
     }
 
@@ -63,13 +63,13 @@ class ReligiousController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create religious','Add');
+                //$this->addMonitoring('Create religious','Add');
                 $data = new Religious();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create religious','Update');
+                //$this->addMonitoring('Create religious','Update');
                 $data = Religious::withTrashed()->where('slug', $request->slug)->first();
-                $data->modified_by = Auth::guard('admin')->user()->id;            
+                $data->modified_by = Auth::guard('admin')->user()->id;
             }
             $data->slug = $this->getSlug($request->name, $data, boolval($request->slug) );
             $data->name = $request->name;
@@ -89,7 +89,7 @@ class ReligiousController extends Controller
      * Edit religious Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit Religious');
+        //$this->addMonitoring('Edit Religious');
         $data = Religious::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.religious.create',['data' => $data])->render();
     }
@@ -98,7 +98,7 @@ class ReligiousController extends Controller
      * religious Details view
      */
     public function view(Request $request){
-        $this->addMonitoring('View Religious');
+        //$this->addMonitoring('View Religious');
         $data = Religious::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.religious.view',['data' => $data])->render();
     }
@@ -108,7 +108,7 @@ class ReligiousController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('Religious List','Make Archive', 'active', 'archive');
+            //$this->addMonitoring('Religious List','Make Archive', 'active', 'archive');
             $data = Religious::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -123,7 +123,7 @@ class ReligiousController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('Religious Archive List', 'Make active', 'archive', 'active');
+            //$this->addMonitoring('Religious Archive List', 'Make active', 'archive', 'active');
             $data = Religious::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('Religious Restore Successfully');
@@ -138,7 +138,7 @@ class ReligiousController extends Controller
      */
     public function delete(Request $request){
         try{
-            $this->addMonitoring('Religious Archive List', 'Make active', 'archive', 'delete');
+            //$this->addMonitoring('Religious Archive List', 'Make active', 'archive', 'delete');
             $data = Religious::withTrashed()->where('slug', $request->slug)->first();
             $this->RemoveFile($data->image_path);
             $data->forceDelete();
@@ -153,12 +153,12 @@ class ReligiousController extends Controller
      * Show Archive Religious List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
-        $this->addMonitoring('Religious Archive List');
+
+        //$this->addMonitoring('Religious Archive List');
         $params = [
             'nav'               => 'religious',
             'subNav'            => 'religious.archive_list',
@@ -182,16 +182,16 @@ class ReligiousController extends Controller
         }else{
             $data = Religious::onlyTrashed()->orderBy('id', 'ASC')->get();
         }
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return $row->createdBy->name; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return $row->createdBy->name; })
             ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             // ->editcolumn('image_path', function($row){ return '<img src="'.asset($row->image_path).'" height="60">'; })
             ->addColumn('status', function($row){
                 return $row->status == 'published' ? '<span class="badge badge-success">'.$row->status.'</span>' : '<span class="badge badge-warning">'.$row->status.'</span>';
             })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 // $li = '<a href="'.route('religious.view',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li = '<a href="'.route('religious.edit',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 if($type == 'list'){

@@ -31,12 +31,12 @@ class PackageController extends Controller
     /**
      * Show package List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('package List');
+        //$this->addMonitoring('package List');
         $params = [
             'nav'               => 'package',
             'subNav'            => 'package.list',
@@ -54,7 +54,7 @@ class PackageController extends Controller
      * Create New package
      */
     public function create(){
-        $this->addMonitoring('Create package');
+        //$this->addMonitoring('Create package');
         return view('backEnd.package.create')->render();
     }
 
@@ -64,13 +64,13 @@ class PackageController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create package','Add');
+                //$this->addMonitoring('Create package','Add');
                 $data = new package();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create package','Update');
+                //$this->addMonitoring('Create package','Update');
                 $data = Package::withTrashed()->where('slug', $request->slug)->first();
-                $data->modified_by = Auth::guard('admin')->user()->id;            
+                $data->modified_by = Auth::guard('admin')->user()->id;
             }
             $data->slug = $this->getSlug($request->title, $data, boolval($request->slug) );
             $data->title = $request->title;
@@ -105,7 +105,7 @@ class PackageController extends Controller
      * Edit package Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit package');
+        //$this->addMonitoring('Edit package');
         $data = Package::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.package.create',['data' => $data])->render();
     }
@@ -114,7 +114,7 @@ class PackageController extends Controller
      * package Details view
      */
     public function view(Request $request){
-        $this->addMonitoring('View package');
+        //$this->addMonitoring('View package');
         $data = Package::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.package.view',['data' => $data])->render();
     }
@@ -124,7 +124,7 @@ class PackageController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('package List','Make Archive', 'active', 'archive');
+            //$this->addMonitoring('package List','Make Archive', 'active', 'archive');
             $data = Package::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -139,7 +139,7 @@ class PackageController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('package Archive List', 'Make active', 'archive', 'active');
+            //$this->addMonitoring('package Archive List', 'Make active', 'archive', 'active');
             $data = Package::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('package Restore Successfully');
@@ -154,7 +154,7 @@ class PackageController extends Controller
      */
     public function delete(Request $request){
         try{
-            $this->addMonitoring('package Archive List', 'Make active', 'archive', 'delete');
+            //$this->addMonitoring('package Archive List', 'Make active', 'archive', 'delete');
             $data = Package::withTrashed()->where('slug', $request->slug)->first();
             $this->RemoveFile($data->image_path);
             $data->forceDelete();
@@ -169,12 +169,12 @@ class PackageController extends Controller
      * Show Archive package List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
-        $this->addMonitoring('package Archive List');
+
+        //$this->addMonitoring('package Archive List');
         $params = [
             'nav'               => 'package',
             'subNav'            => 'package.archive_list',
@@ -199,10 +199,10 @@ class PackageController extends Controller
             $data = Package::onlyTrashed()->orderBy('id', 'ASC')->get();
         }
         $system = SystemInfo::first();
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return $row->createdBy->name; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return $row->createdBy->name; })
             ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             ->editColumn('duration', function($row){ return $row->duration .' '. ucfirst($row->duration_type); })
             ->editColumn('current_fee', function($row) use ($system){ return $row->current_fee .' '.$system->currency; })
@@ -211,7 +211,7 @@ class PackageController extends Controller
             ->addColumn('status', function($row){
                 return $row->status == 'published' ? '<span class="badge badge-success">'.$row->status.'</span>' : '<span class="badge badge-warning">'.$row->status.'</span>';
             })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 $li = '<a href="'.route('package.view',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li .= '<a href="'.route('package.edit',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 if($type == 'list'){

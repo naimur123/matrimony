@@ -30,12 +30,12 @@ class SuccessStoryController extends Controller
     /**
      * Show successStory List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('Success Story List');
+        //$this->addMonitoring('Success Story List');
         $params = [
             'nav'               => 'successStory',
             'subNav'            => 'successStory.list',
@@ -53,7 +53,7 @@ class SuccessStoryController extends Controller
      * Create New successStory
      */
     public function create(){
-        $this->addMonitoring('Create successStory');
+        //$this->addMonitoring('Create successStory');
         return view('backEnd.successStory.create')->render();
     }
 
@@ -63,13 +63,13 @@ class SuccessStoryController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create successStory','Add');
+                //$this->addMonitoring('Create successStory','Add');
                 $data = new SuccessStory();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create successStory','Update');
+                //$this->addMonitoring('Create successStory','Update');
                 $data = SuccessStory::withTrashed()->where('slug', $request->slug)->first();
-                $data->modified_by = Auth::guard('admin')->user()->id;                
+                $data->modified_by = Auth::guard('admin')->user()->id;
             }
             $data->slug = $this->getSlug($request->title, $data, boolval($request->slug) );
             $data->title = $request->title;
@@ -91,7 +91,7 @@ class SuccessStoryController extends Controller
      * Edit successStory Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit Success Story');        
+        //$this->addMonitoring('Edit Success Story');
         $data = SuccessStory::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.successStory.create',['data' => $data])->render();
     }
@@ -100,7 +100,7 @@ class SuccessStoryController extends Controller
      * successStory Details view
      */
     public function view(Request $request){
-        $this->addMonitoring('View news');
+        //$this->addMonitoring('View news');
         $data = SuccessStory::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.successStory.view',['data' => $data])->render();
     }
@@ -111,7 +111,7 @@ class SuccessStoryController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('successStory List','Make Archive', 'active', 'archive');
+            //$this->addMonitoring('successStory List','Make Archive', 'active', 'archive');
             $data = SuccessStory::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -126,7 +126,7 @@ class SuccessStoryController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('successStory Archive List', 'Make active', 'archive', 'active');
+            //$this->addMonitoring('successStory Archive List', 'Make active', 'archive', 'active');
             $data = SuccessStory::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('successStory Restore Successfully');
@@ -141,7 +141,7 @@ class SuccessStoryController extends Controller
      */
     public function delete(Request $request){
         try{
-            $this->addMonitoring('successStory Archive List', 'Make active', 'archive', 'delete');
+            //$this->addMonitoring('successStory Archive List', 'Make active', 'archive', 'delete');
             $data = SuccessStory::withTrashed()->where('slug', $request->slug)->first();
             $this->RemoveFile($data->image_path);
             $data->forceDelete();
@@ -156,12 +156,12 @@ class SuccessStoryController extends Controller
      * Show Archive successStory List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
-        $this->addMonitoring('successStory Archive List');
+
+        //$this->addMonitoring('successStory Archive List');
         $params = [
             'nav'               => 'successStory',
             'subNav'            => 'successStory.archive_list',
@@ -185,16 +185,16 @@ class SuccessStoryController extends Controller
         }else{
             $data = SuccessStory::onlyTrashed()->orderBy('id', 'ASC')->get();
         }
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return $row->createdBy->name; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return $row->createdBy->name; })
             ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             ->editcolumn('image_path', function($row){ return '<img src="'.asset($row->image_path).'" height="60">'; })
             ->addColumn('status', function($row){
                 return $row->status == 'published' ? '<span class="badge badge-success">'.$row->status.'</span>' : '<span class="badge badge-warning">'.$row->status.'</span>';
             })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 $li = '<a href="'.route('successStory.view',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li .= '<a href="'.route('successStory.edit',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 if($type == 'list'){

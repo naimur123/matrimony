@@ -91,7 +91,7 @@ class BannerController extends Controller
     public function edit(Request $request){
         // $this->addMonitoring('Edit Banner');
         $data = Banner::withTrashed()->where('slug', $request->slug)->first();
-        return view('backEnd.Banner.create',['data' => $data])->render();
+        return view('backEnd.banner.create',['data' => $data])->render();
     }
 
     /**

@@ -31,7 +31,7 @@ class SocialMediaController extends Controller
     /**
      * Show religious List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
@@ -55,10 +55,10 @@ class SocialMediaController extends Controller
     public function create(){
         return view('backEnd.socialMedia.createSocialIcon')->render();
     }
-    
+
     //Save Or Update Social Media info
     public function store(Request $request) {
-        
+
         if($request->id == 0){
             $validate = Validator::make($request->all(),[
                 'icon' => 'required|unique:social_media'
@@ -70,29 +70,29 @@ class SocialMediaController extends Controller
             $icon = new SocialMedia();
         }else{
             $icon = SocialMedia::find($request->id);
-        }        
+        }
         try{
-            DB::beginTransaction();            
+            DB::beginTransaction();
             $icon->icon = $request->icon;
             $icon->link = $request->link;
             $icon->position = $request->position;
             $icon->publication_status = $request->publication_status;
             $icon->save();
-            DB::commit(); 
-            $this->success('Information Add Successfully');            
+            DB::commit();
+            $this->success('Information Add Successfully');
         } catch (Exception $e) {
             DB::rollback();
             $this->message = $this->getError($e);
         }
         return $this->output();
     }
-    
+
     //Edit Social Media info
     public function edit($id) {
         $data = SocialMedia::find($id);
         return view('backEnd.socialMedia.createSocialIcon', ['data' => $data ])->render();
     }
-    
+
     //Delete Social Media Icon
     public function delete($id) {
         try{
@@ -104,7 +104,7 @@ class SocialMediaController extends Controller
             $this->message = $this->getError($e);
             return response()->json($this->output());
         }
-       
+
     }
 
     /**
@@ -112,7 +112,7 @@ class SocialMediaController extends Controller
      * Type will be list & archive
      * Default Type is list
      */
-    protected function getDataTable($type = 'list'){               
+    protected function getDataTable($type = 'list'){
         $datas = SocialMedia::orderBy('position','ASC')->get();
             return DataTables::of($datas)
             ->addColumn('index',function(){

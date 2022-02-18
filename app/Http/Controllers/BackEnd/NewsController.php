@@ -30,12 +30,12 @@ class NewsController extends Controller
     /**
      * Show news List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('news List');
+        //$this->addMonitoring('news List');
         $params = [
             'nav'               => 'news',
             'subNav'            => 'news.list',
@@ -53,7 +53,7 @@ class NewsController extends Controller
      * Create New news
      */
     public function create(){
-        $this->addMonitoring('Create news');
+        //$this->addMonitoring('Create news');
         return view('backEnd.news.create')->render();
     }
 
@@ -63,15 +63,15 @@ class NewsController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create news','Add');
+                //$this->addMonitoring('Create news','Add');
                 $data = new News();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create news','Update');
+                //$this->addMonitoring('Create news','Update');
                 $data = News::withTrashed()->where('slug', $request->slug)->first();
-                $data->modified_by = Auth::guard('admin')->user()->id;            
+                $data->modified_by = Auth::guard('admin')->user()->id;
             }
-            
+
             $data->slug = $this->getSlug($request->title, $data, boolval($request->slug) );
             $data->title = $request->title;
             $data->meta_tag = $request->meta_tag;
@@ -92,7 +92,7 @@ class NewsController extends Controller
      * Edit news Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit news');
+        //$this->addMonitoring('Edit news');
         $data = News::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.news.create',['data' => $data])->render();
     }
@@ -101,7 +101,7 @@ class NewsController extends Controller
      * News Details view
      */
     public function view(Request $request){
-        $this->addMonitoring('View news');
+        //$this->addMonitoring('View news');
         $data = News::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.news.view',['data' => $data])->render();
     }
@@ -111,7 +111,7 @@ class NewsController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('News List','Make Archive', 'active', 'archive');
+            //$this->addMonitoring('News List','Make Archive', 'active', 'archive');
             $data = News::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -126,7 +126,7 @@ class NewsController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('News Archive List', 'Make active', 'archive', 'active');
+            //$this->addMonitoring('News Archive List', 'Make active', 'archive', 'active');
             $data = News::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('news Restore Successfully');
@@ -141,7 +141,7 @@ class NewsController extends Controller
      */
     public function delete(Request $request){
         try{
-            $this->addMonitoring('news Archive List', 'Make active', 'archive', 'delete');
+            //$this->addMonitoring('news Archive List', 'Make active', 'archive', 'delete');
             $data = News::withTrashed()->where('slug', $request->slug)->first();
             $this->RemoveFile($data->image_path);
             $data->forceDelete();
@@ -156,12 +156,12 @@ class NewsController extends Controller
      * Show Archive news List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
-        $this->addMonitoring('news Archive List');
+
+        //$this->addMonitoring('news Archive List');
         $params = [
             'nav'               => 'news',
             'subNav'            => 'news.archive_list',
@@ -185,16 +185,16 @@ class NewsController extends Controller
         }else{
             $data = News::onlyTrashed()->orderBy('id', 'ASC')->get();
         }
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return $row->createdBy->name; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return $row->createdBy->name; })
             ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             ->editcolumn('image_path', function($row){ return '<img src="'.asset($row->image_path).'" height="60">'; })
             ->addColumn('status', function($row){
                 return $row->status == 'published' ? '<span class="badge badge-success">'.$row->status.'</span>' : '<span class="badge badge-warning">'.$row->status.'</span>';
             })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 $li = '<a href="'.route('news.view',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li .= '<a href="'.route('news.edit',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 if($type == 'list'){

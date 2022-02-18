@@ -9,7 +9,7 @@
     .pricing-table-grid, .pricing-table-grid:hover{ border: none;}
     .pricing-table:hover{border:1px solid #428bca;}
     .pricing-heading{background: #ffa417; padding-top: 12px !important; padding-bottom: 12px !important ; width: 100%;color:#fff !important;}
-    #home-form{background:#ecf0f1; padding:15px 0px; border-top-left-radius:5px;border-top-right-radius:5px; }
+    #home-form{background:#ecf0f1; opacity: 0.9; padding:15px 0px; border-top-left-radius:5px;border-top-right-radius:5px; border-bottom-left-radius:5px;border-bottom-right-radius:5px; }
     #home-form ul li{list-style-type:none;display: inline; float left;padding:0px 3px;}
     .looking-for img{cursor: pointer; height: 45px;}
     #home-form .btn{padding: 6px 20px;height: 35px;background: #ff512f;}
@@ -107,9 +107,9 @@
         <div style="margin-left: 6em; margin-top: -4em;">Living In</div>
         <select style="margin-left: 8em; margin-top: 0.5em; width: 22% !important;">
           <option value="">Select</option>
-          {{-- @foreach($religious as $religion)
-              <option value="{{ $religion->id }}" > {{ $religion->name }} </option>
-          @endforeach --}}
+          @foreach($countries as $country)
+              <option value="{{ $country->id }}" > {{ $country->country }} </option>
+          @endforeach
         </select>
         </ul>
 
@@ -153,7 +153,7 @@
               </a>
             </div>
             <br>
-            <a href="{{ url('/register') }}"  class="user-auth fa-2x text-info"> Sign Up </a>
+            <a href="{{ url('/register') }}"  class="user-auth fa-2x" style="color:#c21038"> Sign Up </a>
             <p>Register for free & put up your Profile</p>
         </div>
 
@@ -164,7 +164,7 @@
             </a>
           </div>
           <br>
-          <a href="{{ url('/register') }}"  class="user-auth fa-2x text-info"> Connect </a>
+          <a href="{{ url('/register') }}"  class="user-auth fa-2x" style="color:#c21038"> Connect </a>
           <p>Select & Connect with Matches you like</p>
         </div>
 
@@ -175,7 +175,7 @@
             </a>
           </div>
           <br>
-          <a href="{{ url('/register') }}"  class="user-auth fa-2x text-info"> Interact </a>
+          <a href="{{ url('/register') }}"  class="user-auth fa-2x" style="color:#c21038"> Interact </a>
           <p>Become a Premium Member & Start a Conversation</p>
         </div>
 
@@ -187,7 +187,8 @@
   <div class="grid_2" style="margin-top: 30px; background: #eee; padding: 30px 0px 15px 0px;">
     <div class="container">
       <div class="row" >
-        <div class="col-sm-12"><h2 class="text-center">Member Who Have Found Love</h2></div>
+        {{-- <div class="col-sm-12"><h2 class="text-center">Member Who Have Found Love</h2></div> --}}
+        <div class="col-sm-12"><h2 class="text-center" style="color:#c21038; letter-spacing: 0.41px;"> We Service with Millions of Success Stories</h2></div>
       </div>
       <div class="row" style="margin-top: 30px;margin-bottom: 30px;">
         @foreach($success_stories as $story)
@@ -207,6 +208,9 @@
           </div>
       </div>
     </div>
+  </div>
+  <div class="grid_2" style="margin-top: -78px; background: #c21038; padding: 30px 0px 15px 0px; text-align: center;">
+    <p style="font: italic normal normal 27px/32px Lucida Bright; color: #FFFFFF;">Your Story is wating to happen! <a class="btn btn-light" href="{{ url('/register') }}" role="button" style="color:#fff;">Get Started</a></p>
   </div>
 
   <!-- Testimonial  -->

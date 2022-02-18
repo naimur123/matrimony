@@ -35,7 +35,7 @@ class EducationLevelController extends Controller
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('Education level List');
+        ////$this->addMonitoring('Education level List');
         $params = [
             'nav'               => 'education_level',
             'subNav'            => 'education_level.list',
@@ -53,7 +53,7 @@ class EducationLevelController extends Controller
      * Create New education_level
      */
     public function create(){
-        $this->addMonitoring('Create education_level');
+        //$this->addMonitoring('Create education_level');
         return view('backEnd.educationLevel.create')->render();
     }
 
@@ -63,11 +63,11 @@ class EducationLevelController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create education_level','Add');
+                //$this->addMonitoring('Create education_level','Add');
                 $data = new EducationLevel();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create education_level','Update');
+                //$this->addMonitoring('Create education_level','Update');
                 $data = EducationLevel::withTrashed()->where('slug', $request->slug)->first();
                 $data->modified_by = Auth::guard('admin')->user()->id;            
             }
@@ -88,7 +88,7 @@ class EducationLevelController extends Controller
      * Edit education_level Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit Education level');
+        //$this->addMonitoring('Edit Education level');
         $data = EducationLevel::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.educationLevel.create',['data' => $data])->render();
     }
@@ -97,7 +97,7 @@ class EducationLevelController extends Controller
      * education_level Details view
      */
     public function view(Request $request){
-        $this->addMonitoring('View Education level');
+        //$this->addMonitoring('View Education level');
         $data = EducationLevel::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.educationLevel.view',['data' => $data])->render();
     }
@@ -107,7 +107,7 @@ class EducationLevelController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('Education level List','Make Archive', 'active', 'archive');
+            //$this->addMonitoring('Education level List','Make Archive', 'active', 'archive');
             $data = EducationLevel::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -122,7 +122,7 @@ class EducationLevelController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('Education level Archive List', 'Make active', 'archive', 'active');
+            //$this->addMonitoring('Education level Archive List', 'Make active', 'archive', 'active');
             $data = EducationLevel::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('Education level Restore Successfully');
@@ -137,7 +137,7 @@ class EducationLevelController extends Controller
      */
     public function delete(Request $request){
         try{
-            $this->addMonitoring('Education level Archive List', 'Make active', 'archive', 'delete');
+            //$this->addMonitoring('Education level Archive List', 'Make active', 'archive', 'delete');
             $data = EducationLevel::withTrashed()->where('slug', $request->slug)->first();
             $this->RemoveFile($data->image_path);
             $data->forceDelete();
@@ -157,7 +157,7 @@ class EducationLevelController extends Controller
             return $this->getDataTable('archive');
         }
         
-        $this->addMonitoring('Education level Archive List');
+        //$this->addMonitoring('Education level Archive List');
         $params = [
             'nav'               => 'education_level',
             'subNav'            => 'education_level.archive_list',

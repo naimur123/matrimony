@@ -14,7 +14,7 @@ class ReportController extends Controller
 {
     use Profile;
     /********************************************************************************************
-     * User REport Section 
+     * User REport Section
      */
 
      /**
@@ -39,7 +39,7 @@ class ReportController extends Controller
     public function userReport(Request $request, $type = 'active'){
         if( $request->ajax() ){
             return $this->getUserDataTable($type);
-        } 
+        }
         $available_types = [
             'active', 'deactive', 'male', 'female', 'verified', 'unverified',
             'pending', 'paid', 'today_register','total_register','total-subscribe-users'
@@ -47,7 +47,7 @@ class ReportController extends Controller
         if( !in_array( $type, $available_types)){
             abort(404);
         }
-        $this->addMonitoring('Report');
+        //$this->addMonitoring('Report');
         $params = [
             'nav'               => 'report',
             'subNav'            => 'user.'.$type,
@@ -91,10 +91,10 @@ class ReportController extends Controller
             // Total Register Have to Condition
         }
         $data = $data->withTrashed()->get();
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->addColumn('id', function($row){ return 'MMBD-'.$row->id; }) 
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->addColumn('id', function($row){ return 'MMBD-'.$row->id; })
             ->addcolumn('image', function($row){ return isset($row->profilePic->image_path) && file_exists($row->profilePic->image_path) ? '<img src="'.asset($row->profilePic->image_path).'"height="180">' : '<img src="'.asset('frontEnd/dummy_user.jpg').'"height="180">'; })
             ->addcolumn('name', function($row){ return $row->first_name . ' ' . $row->last_name; })
             ->addcolumn('gender', function($row){ return $row->gender == "M" ? 'Male' : 'Female'; })
@@ -125,7 +125,7 @@ class ReportController extends Controller
                 }
             })
             ->addColumn('action',function($row) use($type){
-                return $this->getUserActionOptions($row, $type);                      
+                return $this->getUserActionOptions($row, $type);
             })
             ->rawColumns(['action', 'image','status'])
             ->make(true);
@@ -133,7 +133,7 @@ class ReportController extends Controller
 
 
     /********************************************************************************************
-     * User Payment Report Section 
+     * User Payment Report Section
      */
 
      /**
@@ -164,11 +164,11 @@ class ReportController extends Controller
             'today-pending-payment','monthly-pending-payment','all-pending-payment',
             'today-paid-payment','monthly-paid-payment','all-paid-payment',
         ];
-        
+
         if( !in_array( $type, $available_types)){
             abort(404);
         }
-        $this->addMonitoring('Report');
+        //$this->addMonitoring('Report');
         $params = [
             'nav'               => 'report',
             'subNav'            => 'payment.'.$type,
@@ -186,7 +186,7 @@ class ReportController extends Controller
      * GetUser DataTable
      */
     protected function getUserDataTable2($type){
-        
+
         if( $type == "today-paid-payment" || $type == "monthly-paid-payment" ||  $type == "all-paid-payment" ){
             $data = $this->getTotalPaidPaymentUserList($type);
         }else{
@@ -194,12 +194,12 @@ class ReportController extends Controller
         }
 
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->addColumn('id', function($row){ return 'MMBD-'.$row->id; }) 
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->addColumn('id', function($row){ return 'MMBD-'.$row->id; })
             ->addcolumn('image', function($row){ return isset($row->profilePic->image_path) && file_exists($row->profilePic->image_path) ? '<img src="'.asset($row->profilePic->image_path).'"height="180">' : '<img src="'.asset('frontEnd/dummy_user.jpg').'"height="180">'; })
             ->addcolumn('name', function($row){ return $row->first_name . ' ' . $row->last_name; })
             ->addcolumn('gender', function($row){ return $row->gender == "M" ? 'Male' : 'Female'; })
-            ->addColumn('profession', function($row){ return isset($row->careerProfession->name) ? $row->careerProfession->name : 'N/A'; })            
+            ->addColumn('profession', function($row){ return isset($row->careerProfession->name) ? $row->careerProfession->name : 'N/A'; })
             ->addColumn('package', function($row){ return isset($row->subscribePackage->packageDetails) ? $row->subscribePackage->packageDetails->title : 'N/A'; })
             ->addColumn('activation_date', function($row){ return isset($row->subscribePackage->activation_date) ? $row->subscribePackage->activation_date : 'N/A'; })
             ->addColumn('expire_date', function($row){ return isset($row->subscribePackage->expire_date) ? $row->subscribePackage->expire_date : 'N/A'; })
@@ -216,7 +216,7 @@ class ReportController extends Controller
                     return '<span class="badge badge-danger">'.$row->subscribePackage->payment_status.'</span>';
                 }else{
                     return 'N/A';
-                }                
+                }
             })
             ->addColumn('status', function($row){
                 if( $row->user_status == 1 ){
@@ -244,7 +244,7 @@ class ReportController extends Controller
                 }
             })
             ->addColumn('action',function($row) use($type){
-                return $this->getUserActionOptions($row, $type);                          
+                return $this->getUserActionOptions($row, $type);
             })
             ->rawColumns(['action', 'image','status','payment_status'])
             ->make(true);
@@ -275,10 +275,10 @@ class ReportController extends Controller
     protected function getTotalpendingPaymentUserList($range = Null){
         $paid_users_arr = SubscribePackage::where('activation_date', '<=', date('Y-m-d'))
             ->where('expire_date', '>=', date('Y-m-d'))
-            ->where('payment_status', 'paid')           
+            ->where('payment_status', 'paid')
             ->select('user_id')
             ->groupBy('user_id')->get()->pluck('user_id');
-        
+
         $user = User::whereNotIn('id', $paid_users_arr);
         if($range == 'today-pending-payment'){
             $user->where('created_at', '>=', date('Y-m-d').' 00:00:00');
@@ -288,6 +288,6 @@ class ReportController extends Controller
             //
         }
         return $user->withTrashed()->orderBy('id','DESC')->get();
-        
+
     }
 }

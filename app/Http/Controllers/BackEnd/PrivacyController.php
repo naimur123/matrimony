@@ -30,12 +30,12 @@ class PrivacyController extends Controller
     /**
      * Show privacy List  without Archive
      */
-    public function index(Request $request){        
+    public function index(Request $request){
         if( $request->ajax() ){
             return $this->getDataTable();
         }
 
-        $this->addMonitoring('privacy List');
+        //$this->addMonitoring('privacy List');
         $params = [
             'nav'               => 'privacy',
             'subNav'            => 'privacy.list',
@@ -53,7 +53,7 @@ class PrivacyController extends Controller
      * Create New privacy
      */
     public function create(){
-        $this->addMonitoring('Create privacy');
+        //$this->addMonitoring('Create privacy');
         return view('backEnd.privacy.create')->render();
     }
 
@@ -63,13 +63,13 @@ class PrivacyController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create privacy','Add');
+                //$this->addMonitoring('Create privacy','Add');
                 $data = new PrivacyPolicy();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create privacy','Update');
+                //$this->addMonitoring('Create privacy','Update');
                 $data = PrivacyPolicy::withTrashed()->where('slug', $request->slug)->first();
-                $data->modified_by = Auth::guard('admin')->user()->id;            
+                $data->modified_by = Auth::guard('admin')->user()->id;
             }
             $data->slug = $this->getSlug($request->title, $data, boolval($request->slug) );
             $data->title = $request->title;
@@ -89,7 +89,7 @@ class PrivacyController extends Controller
      * Edit privacy Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit privacy');
+        //$this->addMonitoring('Edit privacy');
         $data = PrivacyPolicy::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.privacy.create',['data' => $data])->render();
     }
@@ -98,7 +98,7 @@ class PrivacyController extends Controller
      * privacy Details view
      */
     public function view(Request $request){
-        $this->addMonitoring('View privacy');
+        //$this->addMonitoring('View privacy');
         $data = PrivacyPolicy::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.privacy.view',['data' => $data])->render();
     }
@@ -108,7 +108,7 @@ class PrivacyController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('privacy List','Make Archive', 'active', 'archive');
+            //$this->addMonitoring('privacy List','Make Archive', 'active', 'archive');
             $data = PrivacyPolicy::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -123,7 +123,7 @@ class PrivacyController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('privacy Archive List', 'Make active', 'archive', 'active');
+            //$this->addMonitoring('privacy Archive List', 'Make active', 'archive', 'active');
             $data = PrivacyPolicy::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('privacy Restore Successfully');
@@ -138,7 +138,7 @@ class PrivacyController extends Controller
      */
     public function delete(Request $request){
         try{
-            $this->addMonitoring('privacy Archive List', 'Make active', 'archive', 'delete');
+            //$this->addMonitoring('privacy Archive List', 'Make active', 'archive', 'delete');
             $data = PrivacyPolicy::withTrashed()->where('slug', $request->slug)->first();
             $this->RemoveFile($data->image_path);
             $data->forceDelete();
@@ -153,12 +153,12 @@ class PrivacyController extends Controller
      * Show Archive privacy List
      */
     public function archiveList(Request $request){
-        
+
         if( $request->ajax() ){
             return $this->getDataTable('archive');
         }
-        
-        $this->addMonitoring('privacy Archive List');
+
+        //$this->addMonitoring('privacy Archive List');
         $params = [
             'nav'               => 'privacy',
             'subNav'            => 'privacy.archive_list',
@@ -182,16 +182,16 @@ class PrivacyController extends Controller
         }else{
             $data = PrivacyPolicy::onlyTrashed()->orderBy('id', 'ASC')->get();
         }
-        
+
         return DataTables::of($data)
-            ->addColumn('index', function(){ return ++$this->index; }) 
-            ->editColumn('created_by', function($row){ return $row->createdBy->name; })           
-            ->editColumn('description', function($row){ return substr($row->description, 0 ,50 ) . ' ...'; })           
+            ->addColumn('index', function(){ return ++$this->index; })
+            ->editColumn('created_by', function($row){ return $row->createdBy->name; })
+            ->editColumn('description', function($row){ return substr($row->description, 0 ,50 ) . ' ...'; })
             ->editColumn('modified_by', function($row){ return empty($row->modifiedBy) ? 'N/A' : $row->modifiedBy->name; })
             ->addColumn('status', function($row){
                 return $row->status == 'published' ? '<span class="badge badge-success">'.$row->status.'</span>' : '<span class="badge badge-warning">'.$row->status.'</span>';
             })
-            ->addColumn('action', function($row) use($type){ 
+            ->addColumn('action', function($row) use($type){
                 $li = '<a href="'.route('privacy.view',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-primary" title="View Details" > <span class="fa fa-eye"></span> </a> ';
                 $li .= '<a href="'.route('privacy.edit',['slug' => $row->slug]).'" class="ajax-click-page btn btn-sm btn-info" title="Edit" > <span class="fa fa-edit"></span> </a> ';
                 if($type == 'list'){

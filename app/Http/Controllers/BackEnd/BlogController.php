@@ -54,7 +54,7 @@ class BlogController extends Controller
      * Create New Blog
      */
     public function create(){
-        $this->addMonitoring('Create Blog');
+        //$this->addMonitoring('Create Blog');
         $blogCatrgory = BlogCatrgory::where('status', 'published')->orderBy('name', 'ASC')->get();
         return view('backEnd.blog.create',['blogCatrgory' => $blogCatrgory])->render();
     }
@@ -65,11 +65,11 @@ class BlogController extends Controller
     public function store(Request $request){
         try{
             if( $request->slug == "0" ){
-                $this->addMonitoring('Create Blog','Add');
+                // $this->addMonitoring('Create Blog','Add');
                 $data = new Blog();
                 $data->created_by = Auth::guard('admin')->user()->id;
             }else{
-                $this->addMonitoring('Create Blog','Update');
+                //$this->addMonitoring('Create Blog','Update');
                 $data = Blog::withTrashed()->where('slug', $request->slug)->first();
                 $data->modified_by = Auth::guard('admin')->user()->id;
             }
@@ -95,7 +95,7 @@ class BlogController extends Controller
      * Edit Blog Info
      */
     public function edit(Request $request){
-        $this->addMonitoring('Edit Blog');
+        // $this->addMonitoring('Edit Blog');
         $blogCatrgory = BlogCatrgory::where('status', 'published')->orderBy('name', 'ASC')->get();
         $data = Blog::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.blog.create',['data' => $data, 'blogCatrgory' => $blogCatrgory])->render();
@@ -105,7 +105,7 @@ class BlogController extends Controller
      * Blog Details view
      */
     public function view(Request $request){
-        $this->addMonitoring('View news');
+        // $this->addMonitoring('View news');
         $data = Blog::withTrashed()->where('slug', $request->slug)->first();
         return view('backEnd.blog.view',['data' => $data])->render();
     }
@@ -116,7 +116,7 @@ class BlogController extends Controller
      */
     public function archive(Request $request){
         try{
-            $this->addMonitoring('Blog List','Make Archive', 'active', 'archive');
+            // $this->addMonitoring('Blog List','Make Archive', 'active', 'archive');
             $data = Blog::withTrashed()->where('slug', $request->slug)->first();
             $data->delete();
             $this->success('Make Archive Successfully');
@@ -131,7 +131,7 @@ class BlogController extends Controller
      */
     public function restore(Request $request){
         try{
-            $this->addMonitoring('Blog Archive List', 'Make active', 'archive', 'active');
+            //$this->addMonitoring('Blog Archive List', 'Make active', 'archive', 'active');
             $data = Blog::withTrashed()->where('slug', $request->slug)->first();
             $data->restore();
             $this->success('Blog Restore Successfully');
@@ -146,7 +146,7 @@ class BlogController extends Controller
      */
     public function delete(Request $request){
         try{
-            $this->addMonitoring('Blog Archive List', 'Make active', 'archive', 'delete');
+            //$this->addMonitoring('Blog Archive List', 'Make active', 'archive', 'delete');
             $data = Blog::withTrashed()->where('slug', $request->slug)->first();
             $this->RemoveFile($data->image_path);
             $data->forceDelete();
@@ -166,7 +166,7 @@ class BlogController extends Controller
             return $this->getDataTable('archive');
         }
 
-        $this->addMonitoring('Blog Archive List');
+        //$this->addMonitoring('Blog Archive List');
         $params = [
             'nav'               => 'Blog',
             'subNav'            => 'blog.archive_list',
