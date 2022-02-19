@@ -7,9 +7,16 @@
     .pricing-table-grid li{padding: 10px 0; display: block; text-decoration: none; font-size: 0.85em; color: #555;}
     .pricing-table {padding-left: 0;background: #fff; box-shadow: 2px 4px 15px #999; border-radius: 5px; border:1px solid transparent;margin-top:15px;}
     .pricing-table-grid, .pricing-table-grid:hover{ border: none;}
-    .pricing-table:hover{border:1px solid #428bca;}
-    .pricing-heading{background: #ffa417; padding-top: 12px !important; padding-bottom: 12px !important ; width: 100%;color:#fff !important;}
-    #home-form{background:#ecf0f1; opacity: 0.9; padding:15px 0px; border-top-left-radius:5px;border-top-right-radius:5px; border-bottom-left-radius:5px;border-bottom-right-radius:5px; }
+    .pricing-table:hover{border:1px solid #CE3F5F;}
+    .pricing-heading{background:#CE3F5F; padding-top: 12px !important; padding-bottom: 12px !important ; width: 100%;color:#fff !important;}
+    .btn-info{
+        background-color: #c21038 !important;
+        border-radius: 0.5em;
+    }
+     .btn-primary{
+        background-color: #c21038 !important;
+    }
+    #home-form{background:#eee; opacity: 0.85; padding:15px 0px; border-top-left-radius:5px;border-top-right-radius:5px;border-bottom-left-radius:5px;border-bottom-right-radius:5px; }
     #home-form ul li{list-style-type:none;display: inline; float left;padding:0px 3px;}
     .looking-for img{cursor: pointer; height: 45px;}
     #home-form .btn{padding: 6px 20px;height: 35px;background: #ff512f;}
@@ -17,15 +24,15 @@
     .selected{ border:1px solid #428bca; padding: 5px;}
     .home-religion .btn-default:hover, .home-religion .btn-default:focus, .home-religion .btn-default:active, .home-religion .btn-default.active{ background: #DD2476; color:#fff;}
     @media (min-width:1200px){
-      #home-form{width:62%;margin:0px auto;}
+      #home-form{width:50%;margin:0px auto;}
     }
     @media (max-width:584px){
-        #home-form .btn{padding: 6px 8px;}
+        #home-form .btn{width:100%; padding: 6px 8px;}
     }
-    @media( min-width:585px) and (max-width:767px){
-      .looking-for{width:33% !important;}
-      .religion{width:67% !important;}
-      .age-limit{width:65% !important;}
+    @media( min-width:576px) and (max-width:600px){
+      .looking-for{width:33% !important; margin: auto !important;}
+      .religion{width:67% !important;  margin-left: 50 !important;}
+      .age-limit{width:65% !important;  margin-left: 50% !important;}
       .find-match-btn-div{width:35% !important;}
       .find-match-btn-div .col-sm-12{text-align: left !important;}
 
@@ -40,21 +47,15 @@
 
   <!--Register Helper Form -->
   <div class="container" style="margin: -135px auto;">
-
     <form id="home-form" class="row" >
       <!-- Looking for -->
       <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 looking-for" style="margin:5px 0px; ">
         <div class="row">
           <ul>
-            {{-- <li>
-              <input type="hidden" value="bride" id="home-looking-for" >I'm Looking For
-            </li> --}}
-            {{-- <li><img src="{{ asset('female.png') }}" data-looking_for="bride" class="img-responsive img-thumbnail selected"></li>
-            <li><img src="{{ asset('male.png') }}" data-looking_for="groom" class="img-responsive img-thumbnail"></li> --}}
-            <label style="margin-left: 1em">I'm Looking For</label>
+            <label style="margin-left: 1em" ><input type="hidden" value="bride" id="home-looking-for">Looking For</label>
             <select style="margin-left: 1em; width: 41% !important;">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="Male"><b>Male</option>
+                <option value="Female"><b>Female</option>
             </select>
           </ul>
         </div>
@@ -62,7 +63,7 @@
        <!-- Age Limit -->
        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 age-limit" style="margin:5px 0px;">
         <div class="row">
-           <div >Aged</div>
+           <div ><b>Aged</div>
            <br>
            <div>
              <input class="form-control" id="home-min_age" placeholder="From:" style="width: 30%; height:1.5em; margin-left: -1em; margin-top: -1em; float: left;" type="text" value="18">
@@ -76,7 +77,7 @@
       <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 religion " style="margin:5px 0px;">
         <div class="row">
         <ul>
-        <div style="margin-left: -1em;">Religion</div>
+        <div style="margin-left: -1em;"><input type="hidden" id="home-religion" ><b>Religion</div>
         <select style="margin-left: -1.5em; margin-top:0.5em; width: 22% !important;">
           <option value="">Select</option>
           @foreach($religious as $religion)
@@ -84,24 +85,11 @@
           @endforeach
         </select>
         </ul>
-
-          {{-- <ul>
-            <li><input type="hidden" id="home-religion" >Religion</li>
-            <li class="home-religion">
-              <div class="btn-group" data-toggle="buttons">
-                @foreach($religious as $religion)
-                <label class="btn btn-default">
-                    <input type="radio" value="{{$religion->id}}" > {{ $religion->name }}
-                </label>
-                @endforeach
-              </div>
-            </li>
-          </ul> --}}
         </div>
       </div>
 
       <!--Living In-->
-      <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 " style="margin:5px 0px;">
+      <!-- <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 " style="margin:5px 0px;">
         <div class="row">
           <ul>
         <div style="margin-left: 6em; margin-top: -4em;">Living In</div>
@@ -113,7 +101,7 @@
         </select>
         </ul>
 
-          {{-- <ul>
+          <ul>
             <li><input type="hidden" id="home-religion" >Religion</li>
             <li class="home-religion">
               <div class="btn-group" data-toggle="buttons">
@@ -124,14 +112,14 @@
                 @endforeach
               </div>
             </li>
-          </ul> --}}
-        </div>
-      </div>
+          </ul>
+         </div>
+      </div> -->
 
 
       <div class="col-xs-12 col-sm-6 col-md-12 find-match-btn-div" style="margin:10px 0px 0px 0px;">
         <div class="row">
-          <div style="margin-left: 35em; margin-top: -3.5em;">
+          <div style="margin-left: 23em; margin-top: -3.2em;">
             <button type="submit" class="btn btn-primary" style="padding: 0px 24px; border-radius: -5px;">Find Match</button>
           </div>
         </div>
@@ -193,14 +181,23 @@
       <div class="row" style="margin-top: 30px;margin-bottom: 30px;">
         @foreach($success_stories as $story)
           <div class="col-sm-3 text-center">
-              <div style="margin-top: 10px;" >
+              {{-- <div style="margin-top: 10px;" >
                   <a href="{{ url('/success-story/view-story/'.$story->slug) }}" target="_blank">
                       <img width="120" src="{{ asset($story->image_path) }}" class="text-info img-circle" style="height:150px;" />
                   </a>
               </div>
               <br>
               <h4><b>{{ $story->title }}</b></h4>
-              <p> {!! substr($story->description, 0, 250) !!} <p>
+              <p> {!! substr($story->description, 0, 250) !!} <p> --}}
+                <div class="card" style="width: auto;">
+                  <a href="{{ url('/success-story/view-story/'.$story->slug) }}" target="_blank">
+                  <img width="100%" src="{{ asset($story->image_path) }}" class="card-img-top" alt="..." style="height:200px !important;">
+                  </a><br>
+                  <div class="card-body" style="text-align: left">
+                    <br><h4 class="card-title"><b>{{ $story->title }}<b></h4>
+                    <p class="card-text">{!! substr($story->description, 0, 250) !!}...<a href="{{ url('/success-story/view-story/'.$story->slug) }}">read more</a></p><br>
+                  </div>
+                </div>
           </div>
         @endforeach
           <div class="col-xs-12 text-center" style="margin-top: 20px;">
@@ -217,7 +214,7 @@
   <div class="grid_2" style="margin-top: 30px; margin-bottom:2em; background: #fff; padding: 30px 0px px 0px;">
     <div class="container">
       <div class="row" >
-        <div class="col-sm-12"><h2 class="text-center">Testimonial</h2></div>
+        <div class="col-sm-12"><h2 class="text-center" style="color:#c21038;">Testimonial</h2></div>
       </div>
       <div class="row" style="margin-top: 30px;margin-bottom: 30px;">
         @foreach($testimonials as $testimonial)
@@ -243,14 +240,14 @@
   <div class="grid_2" style="background: #eee; padding-top:30px;padding-bottom: 30px;">
     <div class="container">
       <div class="row" >
-        <div class="col-sm-12"><h2 class="text-center">Our Packages</h2></div>
+        <div class="col-sm-12"><h2 class="text-center" style="color:#c21038;">Our Packages</h2></div>
       </div>
       <div class="row" style="padding-top: 30px;">
         @foreach($packages as $package)
           <div class="col-sm-3 text-center">
             <div class="pricing-table">
               <div class="pricing-table-grid">
-                  <h3 class="pricing-heading bg-primary">{{ $package->title }}</h3>
+                  <h3 class="pricing-heading" style="color: #CE3F5F">{{ $package->title }}</h3>
                   <h3><span class="dollar">{{ $system->currency}}.</span> {{number_format($package->current_fee)}}<br></h3>
                   <ul>
                       <li> <img src="{{ file_exists($package->image_path) ? asset($package->image_path) : asset('image-not-found.png') }}" class="img-responsive" style="height:200px;"> </li>
@@ -278,7 +275,7 @@
   <div class="grid_2" style=" background: #fff; padding: 30px 0px 15px 0px;">
     <div class="container">
       <div class="row">
-        <div class="col-sm-12"><h2 class="text-center">Our Services</h2></div>
+        <div class="col-sm-12"><h2 class="text-center" style="color:#c21038;">Our Services</h2></div>
       </div>
       <div class="row" style="margin-top: 30px;">
         @foreach($our_services as $service)
