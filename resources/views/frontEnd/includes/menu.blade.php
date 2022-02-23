@@ -9,7 +9,9 @@
 
 		@media (max-width:767px){
 			.navbar-nav{ position: absolute; right: 50px; top: 20px; }
-			.navbar-default .navbar-nav > li > a{ color:#fff; font-size: 13px;display: inline !important; float: right}
+            .fa-user-circle{font-size: 0.5em;}
+            .fa-edit{font-size: 0.5em;}
+			.navbar-default .navbar-nav > li > a{ color:#fff; font-size: 5px;display: inline !important; float: right; padding: 10px}
 		}
 	</style>
 @else

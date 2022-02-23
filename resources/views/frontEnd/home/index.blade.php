@@ -16,40 +16,46 @@
      .btn-primary{
         background-color: #c21038 !important;
     }
-    #home-form{background:#eee; opacity: 0.85; padding:15px 0px; border-top-left-radius:5px;border-top-right-radius:5px;border-bottom-left-radius:5px;border-bottom-right-radius:5px; }
-    #home-form ul li{list-style-type:none;display: inline; float left;padding:0px 3px;}
-    .looking-for img{cursor: pointer; height: 45px;}
+    #home-form{background:#eee; opacity: 0.85; padding:30px 0px; border-top-left-radius:5px;border-top-right-radius:5px;border-bottom-left-radius:5px;border-bottom-right-radius:5px; }
+    /* #home-form ul li{list-style-type:none;display: inline; float left;padding:0px 3px;} */
+    /* .looking-for img{cursor: pointer; height: 45px;} */
     #home-form .btn{padding: 6px 20px;height: 35px;background: #ff512f;}
     #home-form .active{background: #dd2476;}
     .selected{ border:1px solid #428bca; padding: 5px;}
     .home-religion .btn-default:hover, .home-religion .btn-default:focus, .home-religion .btn-default:active, .home-religion .btn-default.active{ background: #DD2476; color:#fff;}
     @media (min-width:1200px){
-      #home-form{width:50%;margin:0px auto;}
+      #home-form{width:70%;margin:0px auto;}
     }
-    @media (max-width:584px){
-        #home-form .btn{width:100%; padding: 6px 8px;}
+    @media (max-width:767px){
+        /* #home-form .btn{width:50%; padding: 10px 20px;} */
+        /* .find-match-btn-div{
+        text-align: left; line-height:45px;
+       padding: 10px;
+      } */
+      #home-form{width:100%;margin:150px auto;}
+      #home-form .btn{margin-left: 30%}
+      #special{margin-top: -12em}
     }
-    @media( min-width:576px) and (max-width:600px){
-      .looking-for{width:33% !important; margin: auto !important;}
-      .religion{width:67% !important;  margin-left: 50 !important;}
-      .age-limit{width:65% !important;  margin-left: 50% !important;}
-      .find-match-btn-div{width:35% !important;}
-      .find-match-btn-div .col-sm-12{text-align: left !important;}
+    @media only screen and (max-width: 767px){
+      /* .looking-for{width:100% !important; margin: auto !important;}
+      .religion{width:100% !important;  margin-left: 5% !important;}
+      .age-limit{width:100% !important;  margin-left: 3% !important;}
+      .find-match-btn-div{width:100% !important; margin-left: -80% !important;}
+      .find-match-btn-div .col-sm-12{text-align: left !important;} */
 
-      .looking-for img{cursor: pointer; height: 32px;}
-      #home-form .btn{padding: 6px 12px;}
+
     }
   </style>
 @stop
 @section('mainPart')
-  <div class="banner" style="background : url('{{ asset(isset($banners->image_path) ? $banners->image_path : Null) }}') no-repeat center top;background-size:cover;">
+  <div id="banner" class="banner" style="background : url('{{ asset(isset($banners->image_path) ? $banners->image_path : Null) }}') no-repeat center top;background-size:cover;">
   </div>
 
   <!--Register Helper Form -->
   <div class="container" style="margin: -135px auto;">
     <form id="home-form" class="row" >
       <!-- Looking for -->
-      <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 looking-for" style="margin:5px 0px; ">
+      {{-- <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 looking-for" style="margin:5px 0px; ">
         <div class="row">
           <ul>
             <label style="margin-left: 1em" ><input type="hidden" value="bride" id="home-looking-for">Looking For</label>
@@ -66,7 +72,7 @@
            <div ><b>Aged</div>
            <br>
            <div>
-             <input class="form-control" id="home-min_age" placeholder="From:" style="width: 30%; height:1.5em; margin-left: -1em; margin-top: -1em; float: left;" type="text" value="18">
+             <input class="form-control" id="home-min_age" placeholder="From:" style="width: 30%; height:1.5em;  margin-top: -1em; float: left;" type="text" value="18">
              <input type="text" readonly class="form-control text-center padding-no" style="width: 20%; margin-top: -1.5em; float: left; border: none; background: transparent;" type="text" value="to">
              <input class="form-control" id="home-max_age" placeholder="To:" style="width: 30%; height:1.5em; margin-left: 0em; margin-top:-1em;  float: left;" type="text" value="25">
            </div>
@@ -120,18 +126,57 @@
       <div class="col-xs-12 col-sm-6 col-md-12 find-match-btn-div" style="margin:10px 0px 0px 0px;">
         <div class="row">
           <div style="margin-left: 23em; margin-top: -3.2em;">
-            <button type="submit" class="btn btn-primary" style="padding: 0px 24px; border-radius: -5px;">Find Match</button>
+            <button type="submit" class="btn btn-primary" style="padding: 0px 50px; border-radius: -5px;">Find Match</button>
           </div>
         </div>
-      </div>
+      </div> --}}
+
+      <div class="col-xs-12 col-sm-3 col-md-3">
+            <label><input type="hidden" value="bride" id="home-looking-for"><b>Looking For</label>
+            <ul>
+            <select>
+                <option value="Male"><b>Male</option>
+                <option value="Female"><b>Female</option>
+            </select>
+            </ul>
+       </div>
+
+       <div class="col-xs-12 col-sm-3 col-md-3">
+           <div >Aged</div>
+           <br>
+           <div>
+             <input class="form-control" id="home-min_age" placeholder="From:" style="width: 30%; height:1.5em;  margin-top: -1em; float: left;" type="text" value="18">
+             <input type="text" readonly class="form-control text-center padding-no" style="width: 20%; margin-top: -1.5em; float: left; border: none; background: transparent;" type="text" value="to">
+             <input class="form-control" id="home-max_age" placeholder="To:" style="width: 30%; height:1.5em; margin-left: 0em; margin-top:-1em;  float: left;" type="text" value="25">
+           </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3 col-md-3 ">
+            <div><input type="hidden" id="home-religion" ><b>Religion</div>
+            <select>
+              <option value="">Select</option>
+              @foreach($religious as $religion)
+                  <option value="{{ $religion->id }}" > {{ $religion->name }} </option>
+              @endforeach
+            </select>
+
+        </div>
+
+        <div class="col-xs-12 col-sm-3 col-md-3">
+              <div>
+                <button type="submit" class="btn btn-primary" style="border-radius: -5px; margin-top: 17px !important;">Find Match</button>
+              </div>
+        </div>
+
+
     </form>
   </div>
 
   <!-- Find SomeOne -->
-  <div class="grid_2" style="margin-top: 30px;">
+  <div id="special" class="grid_2">
     <div class="container">
       <div class="row">
-        <div class="col-sm-12" style="margin-top: 45px;"><h2 class="text-center"  style="color:#c21038">Find your Special Someone</h2></div>
+        <div class="col-sm-12" style="margin-top: 60px;"><h2 class="text-center"  style="color:#c21038">Find your Special Someone</h2></div>
       </div>
       <div class="row" style="margin-top: 30px;">
         <div class="col-sm-4 text-center">
@@ -172,7 +217,7 @@
   </div>
 
   <!-- Member find Love -->
-  <div class="grid_2" style="margin-top: 30px; background: #eee; padding: 30px 0px 15px 0px;">
+  <div class="grid_2" style="margin-top: 30px; background: #eee; padding: 50px 0px 15px 0px;">
     <div class="container">
       <div class="row" >
         {{-- <div class="col-sm-12"><h2 class="text-center">Member Who Have Found Love</h2></div> --}}
@@ -206,7 +251,7 @@
       </div>
     </div>
   </div>
-  <div class="grid_2" style="margin-top: -78px; background: #c21038; padding: 30px 0px 15px 0px; text-align: center;">
+  <div class="grid_2" style="margin-top: -55px; background: #c21038; padding: 30px 0px 15px 0px; text-align: center;">
     <p style="font: italic normal normal 27px/32px Lucida Bright; color: #FFFFFF;">Your Story is wating to happen! <a class="btn btn-light" href="{{ url('/register') }}" role="button" style="color:#fff;">Get Started</a></p>
   </div>
 
